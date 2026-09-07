@@ -9,8 +9,9 @@ code, commit messages, and reviews.
 - **Conventional Commits are mandatory**, scoped and linked to the backlog Item ID:
   - `feat(portal): #<id> <imperative description>` — e.g. `feat(portal): #101 add live fee breakdown to quote panel`
   - `fix(portal): #<id> …`, `test(portal): #<id> …`, `chore(ci): …`
-- **Branch naming**: `feature/STB-<id>-<kebab-slug>` — e.g. `feature/STB-101-fee-breakdown`.
-  Defect branches use `fix/STB-<id>-<kebab-slug>`.
+- **Branch naming**: `feature/<id>-<description>` where `<id>` is the GitHub issue
+  number (the Item ID) — e.g. `feature/9-recent-transfers-history`.
+  Defect branches use `fix/<id>-<description>`. See `wiki/Branching-Strategy.md`.
 - Every PR must link its issue (`Closes #<n>`) and complete the banking compliance checklist.
 - Never suggest force-pushing to `main` or bypassing status checks.
 

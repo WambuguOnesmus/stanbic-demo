@@ -31,7 +31,7 @@ npm run test:e2e   # Playwright E2E suite
 
 ## Delivery conventions
 
-- Branch: `feature/STB-<id>-<kebab-slug>` · Commit: `feat(portal): #<id> <description>`
+- Branch: `feature/<id>-<description>` (id = issue number) · Commit: `feat(portal): #<id> <description>`
 - Merges to `main` require a PR, CODEOWNERS approval, and green
   **Playwright E2E**, **CodeQL**, and **Dependency Review** checks.
 - Every interactive element carries a kebab-case `data-testid="stb-*"` selector.

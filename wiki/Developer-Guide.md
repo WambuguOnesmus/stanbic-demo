@@ -39,14 +39,15 @@ git config user.signingkey <YOUR_KEY_ID>
 
 ## 2. Branching & Commit Convention
 
-Every change traces to a backlog **Item ID** (e.g. `STB-101`).
+The **GitHub issue number is the Item ID** — full details in
+[Branching Strategy](Branching-Strategy.md).
 
 | Artifact | Convention | Example |
 |----------|-----------|---------|
-| Feature branch | `feature/STB-<id>-<kebab-slug>` | `feature/STB-101-fee-breakdown` |
-| Defect branch | `fix/STB-<id>-<kebab-slug>` | `fix/STB-214-gbp-rounding` |
-| Commit | `feat(portal): #<issue> <imperative>` | `feat(portal): #101 add live fee breakdown` |
-| PR | Must contain `Closes #<issue>` | `Closes #101` |
+| Feature branch | `feature/<id>-<description>` | `feature/9-recent-transfers-history` |
+| Defect branch | `fix/<id>-<description>` | `fix/14-quote-rounding` |
+| Commit | `feat(portal): #<id> <imperative>` | `feat(portal): #9 add transfers history panel` |
+| PR | Must contain `Closes #<id>` | `Closes #9` |
 
 Merges to `main` require: 1+ CODEOWNERS approval, signed commits, linear
 history, and green status checks for **Playwright E2E**, **CodeQL**, and
@@ -85,7 +86,7 @@ npm run test:e2e:ui
 ## 5. Daily Workflow
 
 1. Pick an item from the **Stanbic Portal Modernization** project board.
-2. `git switch -c feature/STB-<id>-<slug>` from a fresh `main`.
+2. `git switch -c feature/<id>-<description>` from a fresh `main` (id = issue number).
 3. Implement using Copilot with the repo instructions + `react-component` skill;
    attach the issue's prototype screenshot in Copilot Chat for visual grounding.
 4. Add/extend Playwright specs; run locally until green.
