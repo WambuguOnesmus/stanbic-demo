@@ -11,7 +11,8 @@ code, commit messages, and reviews.
   - `fix(portal): #<id> …`, `test(portal): #<id> …`, `chore(ci): …`
 - **Branch naming**: `feature/<id>-<description>` where `<id>` is the GitHub issue
   number (the Item ID) — e.g. `feature/9-recent-transfers-history`.
-  Defect branches use `fix/<id>-<description>`. See `wiki/Branching-Strategy.md`.
+  Defect branches use `fix/<id>-<description>`. See the
+  [Branching Strategy wiki](https://github.com/WambuguOnesmus/stanbic-demo/wiki/Branching-Strategy).
 - Every PR must link its issue (`Closes #<n>`) and complete the banking compliance checklist.
 - Never suggest force-pushing to `main` or bypassing status checks.
 

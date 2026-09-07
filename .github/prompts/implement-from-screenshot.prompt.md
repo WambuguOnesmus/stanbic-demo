@@ -21,7 +21,9 @@ You are implementing a feature for the Stanbic Banking Portal.
    `stanbic-navy`, royal blue `stanbic-royal`, white), typography hierarchy, form
    fields, panels, and dynamic states.
 
-2. **Create the branch per the wiki**: read `wiki/Branching-Strategy.md` and
+2. **Create the branch per the wiki**: read the repository's
+   [Branching Strategy wiki page](https://github.com/WambuguOnesmus/stanbic-demo/wiki/Branching-Strategy)
+   (fetch it if needed) and
    follow it exactly — `feature/<id>-<description>` where `<id>` is the issue
    number, e.g. `feature/${input:issueNumber}-<kebab-description>`, created from
    a fresh `main`.

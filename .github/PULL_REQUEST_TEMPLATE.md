@@ -9,7 +9,7 @@
 
 Closes #<!-- Item ID issue number, e.g. Closes #42 (STB-101) -->
 
-> PRs without a linked issue will be closed. Branch must follow `feature/<id>-<description>` (id = issue number — see wiki/Branching-Strategy.md).
+> PRs without a linked issue will be closed. Branch must follow `feature/<id>-<description>` (id = issue number — see the [Branching Strategy wiki](https://github.com/WambuguOnesmus/stanbic-demo/wiki/Branching-Strategy)).
 
 ## Type of Change
 

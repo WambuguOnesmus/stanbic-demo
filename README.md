@@ -27,7 +27,7 @@ npm run test:e2e   # Playwright E2E suite
 | E2E suite (POM, `data-testid` only) + config | `e2e/` |
 | CI: E2E, CodeQL, Dependency Review, SBOM + attestations | `.github/workflows/` |
 | GHAS demo assets (deliberate vulns, custom secret patterns) | `src/utils/auditLogger.ts`, `src/config/stanbic-custom-patterns.json` |
-| Wiki source (Developer Guide, Demo Talk Track) | `wiki/` |
+| Wiki (setup, branching, demo talk track) | [GitHub wiki](https://github.com/WambuguOnesmus/stanbic-demo/wiki) |
 
 ## Delivery conventions
 
