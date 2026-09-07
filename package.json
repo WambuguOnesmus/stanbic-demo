@@ -5,8 +5,9 @@
   "description": "Stanbic Bank FX & Cross-Border Transfer Portal — GitHub Enterprise, GHAS & Copilot demonstration",
   "type": "module",
   "scripts": {
-    "dev": "npx http-server public -p 4173 -c-1",
-    "build": "mkdir -p dist && cp -r public/* dist/ && cp -r src dist/src",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test --config=e2e/playwright.config.ts",
     "test:e2e:ui": "playwright test --config=e2e/playwright.config.ts --ui"
@@ -20,8 +21,11 @@
     "@types/node": "^20.14.0",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
-    "http-server": "^14.1.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
     "tailwindcss": "^3.4.10",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vite": "^5.4.6"
   }
 }

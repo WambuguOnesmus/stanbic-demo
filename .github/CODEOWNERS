@@ -1,29 +1,32 @@
 # Stanbic FX Modernization — Code Ownership & Review Authority
 #
 # Later rules take precedence. Every protected path requires review from
-# the core banking leads team before merge (enforced by branch protection:
+# the core banking leads before merge (enforced by branch protection:
 # "Require review from Code Owners").
+#
+# NOTE (demo): on the enterprise org, replace @onesmus1024 with
+# @enterprise-org/core-banking-leads — see scripts/setup-gh-enterprise.sh.
 
 # --- Default: any change needs a core banking lead review -------------------
-*                                   @enterprise-org/core-banking-leads
+*                                   @onesmus1024
 
 # --- Core business logic ----------------------------------------------------
-/src/core-ledger/                   @enterprise-org/core-banking-leads
-/src/components/                    @enterprise-org/core-banking-leads
-/src/utils/                         @enterprise-org/core-banking-leads
-/src/config/                        @enterprise-org/core-banking-leads
+/src/core-ledger/                   @onesmus1024
+/src/components/                    @onesmus1024
+/src/utils/                         @onesmus1024
+/src/config/                        @onesmus1024
 
 # --- CI/CD pipelines & repository governance --------------------------------
-/.github/workflows/                 @enterprise-org/core-banking-leads
-/.github/dependabot.yml             @enterprise-org/core-banking-leads
-/.github/CODEOWNERS                 @enterprise-org/core-banking-leads
-/scripts/                           @enterprise-org/core-banking-leads
+/.github/workflows/                 @onesmus1024
+/.github/dependabot.yml             @onesmus1024
+/.github/CODEOWNERS                 @onesmus1024
+/scripts/                           @onesmus1024
 
 # --- Security-sensitive files -----------------------------------------------
-/.github/copilot-content-exclusion.json   @enterprise-org/core-banking-leads
-/src/config/stanbic-custom-patterns.json  @enterprise-org/core-banking-leads
-*.pem                               @enterprise-org/core-banking-leads
-*.key                               @enterprise-org/core-banking-leads
+/.github/copilot-content-exclusion.json   @onesmus1024
+/src/config/stanbic-custom-patterns.json  @onesmus1024
+*.pem                               @onesmus1024
+*.key                               @onesmus1024
 
 # --- Test suite (quality gate integrity) ------------------------------------
-/e2e/                               @enterprise-org/core-banking-leads
+/e2e/                               @onesmus1024

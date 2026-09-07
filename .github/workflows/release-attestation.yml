@@ -1,91 +1,91 @@
 name: Release — SBOM & Build Attestation
 
 on:
-  push:
-    tags: ["v*.*.*"]
-  release:
-    types: [published]
-  workflow_dispatch:
+    push:
+        tags: ["v*.*.*"]
+    release:
+        types: [published]
+    workflow_dispatch:
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  build-attest:
-    name: Build, SBOM & Signed Attestation
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: write        # upload release assets
-      id-token: write        # OIDC token for Sigstore signing
-      attestations: write    # persist artifact attestations
+    build-attest:
+        name: Build, SBOM & Signed Attestation
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        permissions:
+            contents: write # upload release assets
+            id-token: write # OIDC token for Sigstore signing
+            attestations: write # persist artifact attestations
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
 
-      - name: Install dependencies (clean, reproducible)
-        run: npm ci
+            - name: Install dependencies (clean, reproducible)
+              run: npm ci
 
-      - name: Build production bundle
-        run: npm run build
+            - name: Build production bundle
+              run: npm run build
 
-      - name: Package build output
-        run: |
-          tar -czf stanbic-fx-portal-${{ github.ref_name }}.tar.gz dist/
-          sha256sum stanbic-fx-portal-${{ github.ref_name }}.tar.gz > checksums.txt
+            - name: Package build output
+              run: |
+                  tar -czf stanbic-fx-portal-${{ github.ref_name }}.tar.gz dist/
+                  sha256sum stanbic-fx-portal-${{ github.ref_name }}.tar.gz > checksums.txt
 
-      # ---------------------------------------------------------------
-      # SPDX Software Bill of Materials — full dependency inventory for
-      # regulatory audit (what exactly shipped, with licenses & versions).
-      # ---------------------------------------------------------------
-      - name: Generate SPDX SBOM
-        uses: anchore/sbom-action@v0
-        with:
-          path: .
-          format: spdx-json
-          output-file: sbom-stanbic-fx-portal.spdx.json
-          artifact-name: sbom-stanbic-fx-portal.spdx.json
+            # ---------------------------------------------------------------
+            # SPDX Software Bill of Materials — full dependency inventory for
+            # regulatory audit (what exactly shipped, with licenses & versions).
+            # ---------------------------------------------------------------
+            - name: Generate SPDX SBOM
+              uses: anchore/sbom-action@v0
+              with:
+                  path: .
+                  format: spdx-json
+                  output-file: sbom-stanbic-fx-portal.spdx.json
+                  artifact-name: sbom-stanbic-fx-portal.spdx.json
 
-      # ---------------------------------------------------------------
-      # Signed build provenance (SLSA) — cryptographic proof that this
-      # artifact was built by THIS workflow from THIS commit.
-      # Verify later with:
-      #   gh attestation verify stanbic-fx-portal-<tag>.tar.gz --owner enterprise-org
-      # ---------------------------------------------------------------
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: stanbic-fx-portal-${{ github.ref_name }}.tar.gz
+            # ---------------------------------------------------------------
+            # Signed build provenance (SLSA) — cryptographic proof that this
+            # artifact was built by THIS workflow from THIS commit.
+            # Verify later with:
+            #   gh attestation verify stanbic-fx-portal-<tag>.tar.gz --owner enterprise-org
+            # ---------------------------------------------------------------
+            - name: Attest build provenance
+              uses: actions/attest-build-provenance@v1
+              with:
+                  subject-path: stanbic-fx-portal-${{ github.ref_name }}.tar.gz
 
-      - name: Attest SBOM to the artifact
-        uses: actions/attest-sbom@v1
-        with:
-          subject-path: stanbic-fx-portal-${{ github.ref_name }}.tar.gz
-          sbom-path: sbom-stanbic-fx-portal.spdx.json
+            - name: Attest SBOM to the artifact
+              uses: actions/attest-sbom@v1
+              with:
+                  subject-path: stanbic-fx-portal-${{ github.ref_name }}.tar.gz
+                  sbom-path: sbom-stanbic-fx-portal.spdx.json
 
-      - name: Upload release artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: stanbic-fx-portal-release
-          path: |
-            stanbic-fx-portal-${{ github.ref_name }}.tar.gz
-            sbom-stanbic-fx-portal.spdx.json
-            checksums.txt
-          retention-days: 90
+            - name: Upload release artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: stanbic-fx-portal-release
+                  path: |
+                      stanbic-fx-portal-${{ github.ref_name }}.tar.gz
+                      sbom-stanbic-fx-portal.spdx.json
+                      checksums.txt
+                  retention-days: 90
 
-      - name: Attach assets to GitHub Release
-        if: github.event_name == 'release'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release upload "${{ github.ref_name }}" \
-            stanbic-fx-portal-${{ github.ref_name }}.tar.gz \
-            sbom-stanbic-fx-portal.spdx.json \
-            checksums.txt --clobber
+            - name: Attach assets to GitHub Release
+              if: github.event_name == 'release'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh release upload "${{ github.ref_name }}" \
+                    stanbic-fx-portal-${{ github.ref_name }}.tar.gz \
+                    sbom-stanbic-fx-portal.spdx.json \
+                    checksums.txt --clobber

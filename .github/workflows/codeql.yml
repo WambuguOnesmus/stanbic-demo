@@ -1,46 +1,46 @@
 name: CodeQL Analysis
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
-  schedule:
-    # Weekly deep scan — Mondays 03:00 UTC
-    - cron: "0 3 * * 1"
+    push:
+        branches: [main, master]
+    pull_request:
+        branches: [main, master]
+    schedule:
+        # Weekly deep scan — Mondays 03:00 UTC
+        - cron: "0 3 * * 1"
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  analyze:
-    name: CodeQL
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-      security-events: write   # upload SARIF results
-      actions: read
+    analyze:
+        name: CodeQL
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        permissions:
+            contents: read
+            security-events: write # upload SARIF results
+            actions: read
 
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [javascript-typescript]
+        strategy:
+            fail-fast: false
+            matrix:
+                language: [javascript-typescript]
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-          # security-and-quality = security queries + maintainability/reliability.
-          # Alerts on PRs surface "Copilot Autofix" suggestions automatically
-          # when GHAS Code Scanning autofix is enabled at the org/repo level.
-          queries: security-and-quality
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+                  languages: ${{ matrix.language }}
+                  # security-and-quality = security queries + maintainability/reliability.
+                  # Alerts on PRs surface "Copilot Autofix" suggestions automatically
+                  # when GHAS Code Scanning autofix is enabled at the org/repo level.
+                  queries: security-and-quality
 
-      - name: Perform CodeQL analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:${{ matrix.language }}"
+            - name: Perform CodeQL analysis
+              uses: github/codeql-action/analyze@v3
+              with:
+                  category: "/language:${{ matrix.language }}"

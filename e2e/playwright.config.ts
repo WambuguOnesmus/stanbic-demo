@@ -20,7 +20,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npx http-server ../public -p 4173 -c-1",
+    // Vite serves the React app at / and the static prototype at /prototype/.
+    command: "npm run dev",
+    cwd: "..",
     url: "http://localhost:4173/prototype/index.html",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

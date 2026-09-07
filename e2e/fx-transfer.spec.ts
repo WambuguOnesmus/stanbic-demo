@@ -30,7 +30,7 @@ test.describe("Stanbic FX & Cross-Border Transfer Portal", () => {
       const rateText = (await fx.quoteRate.textContent()) ?? "";
       const rateMatch = rateText.match(/([0-9.]+)\s*USD/);
       expect(rateMatch, "quote panel must display the applied USD rate").not.toBeNull();
-      const rate = Number.parseFloat(rateMatch![1]);
+      const rate = Number.parseFloat(rateMatch?.[1] ?? "0");
 
       const quote = await fx.readQuote();
       const expectedFee = amount * FEE_PCT;
