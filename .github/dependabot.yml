@@ -1,0 +1,42 @@
+# Stanbic FX Portal — Dependabot configuration
+# Automated vulnerability tracking + weekly version updates.
+version: 2
+updates:
+  # --- npm application dependencies ---
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Africa/Nairobi"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "fx-portal"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      dev-tooling:
+        dependency-type: "development"
+        patterns:
+          - "*"
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react*"
+
+  # --- GitHub Actions pinning & updates ---
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Africa/Nairobi"
+    labels:
+      - "dependencies"
+      - "ci"
+    commit-message:
+      prefix: "chore(ci)"

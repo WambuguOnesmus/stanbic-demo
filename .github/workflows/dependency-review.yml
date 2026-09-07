@@ -1,0 +1,31 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write   # allow summary comment on the PR
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dependency Review (block vulnerable packages at the PR gate)
+        uses: actions/dependency-review-action@v4
+        with:
+          # Block on any known vulnerability of moderate severity or higher
+          fail-on-severity: moderate
+          # Banking license policy: permissive licenses only
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, 0BSD, Unlicense
+          comment-summary-in-pr: always
+          warn-only: false

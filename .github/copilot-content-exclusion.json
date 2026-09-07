@@ -1,0 +1,28 @@
+{
+  "$comment": "Stanbic Bank — GitHub Copilot content exclusion policy. Paths listed here are never sent to Copilot for context indexing, completions, or chat. Mirrors the org-level 'Content exclusion' settings (Enterprise > Copilot > Content exclusion). Reference for repo-level enforcement and demo purposes.",
+  "version": 1,
+  "policy": {
+    "owner": "Stanbic Group Information Security",
+    "classification": "Restricted — Banking IP & Data Privacy",
+    "review_cycle": "Quarterly"
+  },
+  "exclusions": [
+    {
+      "path": "src/core-ledger/**",
+      "reason": "Proprietary core banking ledger logic — restricted IP; must not be indexed by or surfaced to any AI assistant."
+    },
+    {
+      "path": "**/*.pem",
+      "reason": "Private key material — cryptographic secrets excluded from all Copilot context."
+    },
+    {
+      "path": "**/*.key",
+      "reason": "Key files — defense in depth alongside secret scanning push protection."
+    },
+    {
+      "path": "src/config/production.*",
+      "reason": "Production configuration may contain connection strings and endpoints."
+    }
+  ],
+  "org_level_equivalent_yaml": "\"*\":\n  - \"src/core-ledger/**\"\n  - \"**/*.pem\"\n  - \"**/*.key\"\n  - \"src/config/production.*\"\n"
+}

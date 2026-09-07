@@ -1,0 +1,87 @@
+name: "🚀 Feature Request (FX Modernization)"
+description: "Propose a new feature for the Stanbic FX & Cross-Border Transfer Portal."
+title: "[FX-XXX] <Feature title>"
+labels: ["feature", "fx-portal", "triage"]
+projects: ["enterprise-org/1"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Stanbic FX Modernization — Feature Intake
+        Complete every field. Items without a valid **Item ID** and **Acceptance Criteria** will be returned to the requester.
+
+  - type: input
+    id: item-id
+    attributes:
+      label: "Item ID"
+      description: "Backlog identifier used in branch names and commits (e.g. FX-101)."
+      placeholder: "FX-101"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk-tier
+    attributes:
+      label: "Risk Tier"
+      description: "Regulatory / operational risk classification for this change."
+      options:
+        - "Tier 1 — Customer money movement / core ledger"
+        - "Tier 2 — Customer-facing UI or data display"
+        - "Tier 3 — Internal tooling / non-production"
+    validations:
+      required: true
+
+  - type: textarea
+    id: business-value
+    attributes:
+      label: "Business Value"
+      description: "The measurable customer or business outcome this delivers."
+      placeholder: |
+        e.g. Reduce FX transfer abandonment by surfacing the full fee breakdown
+        before submission, targeting a 15% uplift in completed transfers.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: "Acceptance Criteria"
+      description: "Gherkin-style, testable criteria. Each criterion must be verifiable by a Playwright E2E test."
+      placeholder: |
+        - GIVEN a customer with KES 1,250,000 balance
+          WHEN they enter 50,000 KES to USD
+          THEN the quote panel shows fee (1.25%), SWIFT charge, and total debit
+        - GIVEN a total debit exceeding the balance
+          THEN an "Insufficient funds" error is shown and submission is blocked
+    validations:
+      required: true
+
+  - type: textarea
+    id: prototype-screenshot
+    attributes:
+      label: "Prototype Screenshot"
+      description: |
+        **Attach a screenshot of the approved HTML prototype** (drag & drop the image here).
+        GitHub Copilot uses this image as the visual specification when implementing the feature.
+      placeholder: "Drag and drop the prototype screenshot here…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-notes
+    attributes:
+      label: "Technical Notes (optional)"
+      description: "Known constraints, affected components, API dependencies."
+      placeholder: "e.g. Touches src/components/FxTransferWidget.tsx; rates come from the Treasury Rates API."
+
+  - type: checkboxes
+    id: definition-of-ready
+    attributes:
+      label: "Definition of Ready"
+      options:
+        - label: "Prototype screenshot attached and approved by Product"
+          required: true
+        - label: "Acceptance criteria are testable via data-testid selectors"
+          required: true
+        - label: "No core-ledger (src/core-ledger/**) changes required — or Tier 1 review scheduled"
+          required: true

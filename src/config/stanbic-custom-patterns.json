@@ -1,0 +1,51 @@
+{
+  "$comment": "Stanbic Bank — GHAS custom secret scanning patterns. Apply at Organization > Settings > Code security > Secret scanning > Custom patterns. Push protection should be enabled for each pattern after dry-run validation. This file is the source-of-truth definition used by the security team.",
+  "name": "Stanbic Internal Secret Patterns",
+  "version": "1.0.0",
+  "push_protection": true,
+  "patterns": [
+    {
+      "name": "Stanbic Live API Token",
+      "description": "Production API tokens issued by the Stanbic Integration Gateway. Format: STB_LIVE_ followed by 32 alphanumeric characters. Detection blocks the push (push protection) and raises a secret scanning alert.",
+      "regex": "STB_LIVE_[A-Za-z0-9]{32}",
+      "before_secret": "\\A|[^0-9A-Za-z_]",
+      "after_secret": "\\z|[^0-9A-Za-z]",
+      "severity": "critical",
+      "push_protection": true,
+      "test_string_note": "For live demos, generate a fake token matching the pattern at demo time; never commit a matching string to this repository."
+    },
+    {
+      "name": "Stanbic Sandbox API Token",
+      "description": "Sandbox tokens — alert only (no push protection) to demonstrate severity tiering.",
+      "regex": "STB_TEST_[A-Za-z0-9]{32}",
+      "before_secret": "\\A|[^0-9A-Za-z_]",
+      "after_secret": "\\z|[^0-9A-Za-z]",
+      "severity": "medium",
+      "push_protection": false
+    },
+    {
+      "name": "Stanbic Treasury Rates API Key",
+      "description": "Keys for the internal Treasury Rates feed used by the FX quote engine.",
+      "regex": "STB_RATES_KEY-[A-Fa-f0-9]{40}",
+      "before_secret": "\\A|[^0-9A-Za-z_-]",
+      "after_secret": "\\z|[^0-9A-Fa-f]",
+      "severity": "high",
+      "push_protection": true
+    },
+    {
+      "name": "Stanbic Core Ledger Connection String",
+      "description": "JDBC/ODBC connection strings pointing at the core ledger cluster.",
+      "regex": "(?i)ledger-prod\\.stanbic\\.internal[^\\s\"']{0,120}password=[^\\s\"';]{8,}",
+      "severity": "critical",
+      "push_protection": true
+    }
+  ],
+  "rollout": {
+    "steps": [
+      "1. Create each pattern via org settings and run a dry run across all repositories.",
+      "2. Review dry-run matches with the security team; tune before/after boundaries.",
+      "3. Publish the pattern, then enable push protection per pattern.",
+      "4. Configure alert routing to the #sec-secret-alerts channel and the SIEM webhook."
+    ]
+  }
+}
