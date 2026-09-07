@@ -65,7 +65,7 @@ jobs:
                   subject-path: stanbic-banking-portal-${{ github.ref_name }}.tar.gz
 
             - name: Attest SBOM to the artifact
-              uses: actions/attest-sbom@v1
+              uses: actions/attest-sbom@v4
               with:
                   subject-path: stanbic-banking-portal-${{ github.ref_name }}.tar.gz
                   sbom-path: sbom-stanbic-banking-portal.spdx.json
