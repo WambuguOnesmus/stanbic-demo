@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Stanbic FX Modernization — GitHub Enterprise Repository Bootstrap
+# Stanbic Portal Modernization — GitHub Enterprise Repository Bootstrap
 # =============================================================================
 # Configures:
-#   1. GitHub Project board "Stanbic FX Modernization" with custom fields
+#   1. GitHub Project board "Stanbic Portal Modernization" with custom fields
 #      (Sprint, Item ID, Risk Tier)
 #   2. Enterprise branch protection on 'main':
 #      - PR required with 1+ CODEOWNERS approval
@@ -19,14 +19,14 @@
 #
 # Usage:
 #   ./scripts/setup-gh-enterprise.sh <org> <repo>
-#   e.g. ./scripts/setup-gh-enterprise.sh enterprise-org stanbic-fx-portal
+#   e.g. ./scripts/setup-gh-enterprise.sh enterprise-org stanbic-banking-portal
 # =============================================================================
 set -euo pipefail
 
 ORG="${1:?Usage: $0 <org> <repo>}"
 REPO="${2:?Usage: $0 <org> <repo>}"
 FULL_REPO="${ORG}/${REPO}"
-PROJECT_TITLE="Stanbic FX Modernization"
+PROJECT_TITLE="Stanbic Portal Modernization"
 
 log()  { printf '\033[1;34m[setup]\033[0m %s\n' "$*"; }
 ok()   { printf '\033[1;32m[ ok ]\033[0m %s\n' "$*"; }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stanbic Bank — FX & Cross-Border Transfer Portal</title>
+    <title>Stanbic Bank — Banking Portal</title>
     <style>
         :root {
             --stanbic-navy: #0a2240;
@@ -493,6 +493,71 @@
             font-weight: 700;
             text-align: right;
         }
+
+        /* ---- Quick actions ---- */
+        .quick-card {
+            width: 100%;
+            max-width: 960px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.1rem 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-card h2 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 640px) {
+            .quick-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .quick-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.9rem 0.5rem;
+            border: 2px solid rgba(0, 51, 161, 0.15);
+            border-radius: var(--radius);
+            background: var(--stanbic-blue-light);
+            color: var(--stanbic-royal);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+
+        .quick-btn .icon {
+            font-size: 1.5rem;
+        }
+
+        .quick-btn:hover {
+            background: var(--stanbic-royal);
+            border-color: var(--stanbic-royal);
+            color: var(--white);
+        }
+
+        .quick-status {
+            min-height: 1.2rem;
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+        }
     </style>
 </head>
 
@@ -502,33 +567,54 @@
             <span class="mark">S</span>
             <span>Stanbic Bank &mdash; Banking Portal</span>
         </div>
-        <span class="env-pill" data-testid="fx-env-pill">Prototype &middot; Demo Environment</span>
+        <span class="env-pill" data-testid="stb-env-pill">Prototype &middot; Demo Environment</span>
     </header>
 
     <!-- Accounts Overview -->
-    <section class="accounts-strip" aria-label="Accounts overview" data-testid="fx-accounts-overview">
-        <div class="account-tile" data-testid="fx-account-card-current">
+    <section class="accounts-strip" aria-label="Accounts overview" data-testid="stb-accounts-overview">
+        <div class="account-tile" data-testid="stb-account-card-current">
             <div class="tile-label">Current Account</div>
             <div class="tile-balance" id="tile-current">KES 1,250,000.00</div>
             <div class="tile-meta">Acct &bull;&bull;&bull;&bull; 4521</div>
         </div>
-        <div class="account-tile" data-testid="fx-account-card-savings">
+        <div class="account-tile" data-testid="stb-account-card-savings">
             <div class="tile-label">Savings Account</div>
             <div class="tile-balance">KES 3,480,200.55</div>
             <div class="tile-meta">Acct &bull;&bull;&bull;&bull; 7810</div>
         </div>
-        <div class="account-tile" data-testid="fx-account-card-usd">
+        <div class="account-tile" data-testid="stb-account-card-usd">
             <div class="tile-label">USD Account</div>
             <div class="tile-balance">USD 12,940.10</div>
             <div class="tile-meta">Acct &bull;&bull;&bull;&bull; 2093</div>
         </div>
     </section>
 
+    <!-- Quick Actions -->
+    <section class="quick-card" aria-labelledby="quick-actions-heading" data-testid="stb-quick-actions">
+        <h2 id="quick-actions-heading">Quick Actions</h2>
+        <div class="quick-grid">
+            <button type="button" class="quick-btn" data-testid="stb-action-pay-bills" data-action="Pay Bills">
+                <span class="icon" aria-hidden="true">&#129534;</span> Pay Bills
+            </button>
+            <button type="button" class="quick-btn" data-testid="stb-action-buy-airtime" data-action="Buy Airtime">
+                <span class="icon" aria-hidden="true">&#128241;</span> Buy Airtime
+            </button>
+            <button type="button" class="quick-btn" data-testid="stb-action-download-statement"
+                data-action="Statement">
+                <span class="icon" aria-hidden="true">&#128196;</span> Statement
+            </button>
+            <button type="button" class="quick-btn" data-testid="stb-action-deposit" data-action="Deposit">
+                <span class="icon" aria-hidden="true">&#127974;</span> Deposit
+            </button>
+        </div>
+        <p class="quick-status" aria-live="polite" data-testid="stb-action-status" id="quick-status"></p>
+    </section>
+
     <main class="portal">
         <!-- Account & Live Rates -->
         <section class="card account-card" aria-labelledby="account-heading">
             <h2 id="account-heading">KES Current Account</h2>
-            <div class="balance" data-testid="fx-account-balance" id="account-balance">KES 1,250,000.00</div>
+            <div class="balance" data-testid="stb-account-balance" id="account-balance">KES 1,250,000.00</div>
             <div class="account-meta">Acct &bull;&bull;&bull;&bull; 4521 &mdash; Nairobi Branch</div>
 
             <div class="rates-title"><span class="live-dot" aria-hidden="true"></span> Live Exchange Rates</div>
@@ -540,15 +626,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="rate-row" data-testid="fx-rate-usd">
+                    <tr class="rate-row" data-testid="stb-rate-usd">
                         <td class="pair">KES &rarr; USD</td>
                         <td class="value" id="rate-usd">0.00775</td>
                     </tr>
-                    <tr class="rate-row" data-testid="fx-rate-gbp">
+                    <tr class="rate-row" data-testid="stb-rate-gbp">
                         <td class="pair">KES &rarr; GBP</td>
                         <td class="value" id="rate-gbp">0.00612</td>
                     </tr>
-                    <tr class="rate-row" data-testid="fx-rate-eur">
+                    <tr class="rate-row" data-testid="stb-rate-eur">
                         <td class="pair">KES &rarr; EUR</td>
                         <td class="value" id="rate-eur">0.00718</td>
                     </tr>
@@ -561,19 +647,19 @@
             <h1 id="transfer-heading">Cross-Border Transfer</h1>
             <p class="subtitle">Send money from your KES account to USD, GBP or EUR beneficiaries worldwide.</p>
 
-            <form id="fx-form" class="form-grid" novalidate>
-                <div class="form-error-banner" id="form-error" role="alert" data-testid="fx-form-error"></div>
+            <form id="stb-form" class="form-grid" novalidate>
+                <div class="form-error-banner" id="form-error" role="alert" data-testid="stb-form-error"></div>
 
                 <div class="field">
                     <label for="amount">Amount (KES)</label>
                     <input type="number" id="amount" name="amount" min="100" step="0.01" placeholder="e.g. 50,000"
-                        inputmode="decimal" data-testid="fx-amount-input" required />
-                    <span class="field-error" id="amount-error" data-testid="fx-amount-error"></span>
+                        inputmode="decimal" data-testid="stb-amount-input" required />
+                    <span class="field-error" id="amount-error" data-testid="stb-amount-error"></span>
                 </div>
 
                 <div class="field">
                     <label for="currency">Destination Currency</label>
-                    <select id="currency" name="currency" data-testid="fx-currency-select" required>
+                    <select id="currency" name="currency" data-testid="stb-currency-select" required>
                         <option value="USD" selected>USD — US Dollar</option>
                         <option value="GBP">GBP — British Pound</option>
                         <option value="EUR">EUR — Euro</option>
@@ -584,77 +670,77 @@
                 <div class="field">
                     <label for="beneficiary-name">Beneficiary Name</label>
                     <input type="text" id="beneficiary-name" name="beneficiaryName" placeholder="Full legal name"
-                        maxlength="70" data-testid="fx-beneficiary-name" required />
-                    <span class="field-error" id="beneficiary-error" data-testid="fx-beneficiary-error"></span>
+                        maxlength="70" data-testid="stb-beneficiary-name" required />
+                    <span class="field-error" id="beneficiary-error" data-testid="stb-beneficiary-error"></span>
                 </div>
 
                 <div class="field">
                     <label for="iban">Beneficiary IBAN / Account No.</label>
                     <input type="text" id="iban" name="iban" placeholder="e.g. GB29NWBK60161331926819" maxlength="34"
-                        data-testid="fx-iban-input" required />
-                    <span class="field-error" id="iban-error" data-testid="fx-iban-error"></span>
+                        data-testid="stb-iban-input" required />
+                    <span class="field-error" id="iban-error" data-testid="stb-iban-error"></span>
                 </div>
 
                 <div class="field full">
                     <label for="reference">Payment Reference (optional)</label>
                     <input type="text" id="reference" name="reference" maxlength="140"
-                        placeholder="Invoice / purpose of payment" data-testid="fx-reference-input" />
+                        placeholder="Invoice / purpose of payment" data-testid="stb-reference-input" />
                 </div>
 
                 <!-- Live Quote & Fee Breakdown -->
-                <div class="quote-panel" data-testid="fx-quote-panel">
+                <div class="quote-panel" data-testid="stb-quote-panel">
                     <h3>Live Quote &amp; Fee Breakdown</h3>
                     <div class="quote-line">
                         <span>Exchange rate applied</span>
-                        <strong id="quote-rate" data-testid="fx-quote-rate">1 KES = 0.00775 USD</strong>
+                        <strong id="quote-rate" data-testid="stb-quote-rate">1 KES = 0.00775 USD</strong>
                     </div>
                     <div class="quote-line">
                         <span>Transfer fee (1.25%)</span>
-                        <strong id="quote-fee" data-testid="fx-quote-fee">KES 0.00</strong>
+                        <strong id="quote-fee" data-testid="stb-quote-fee">KES 0.00</strong>
                     </div>
                     <div class="quote-line">
                         <span>SWIFT / correspondent charge</span>
-                        <strong id="quote-swift" data-testid="fx-quote-swift">KES 1,500.00</strong>
+                        <strong id="quote-swift" data-testid="stb-quote-swift">KES 1,500.00</strong>
                     </div>
                     <div class="quote-line">
                         <span>Total debit from account</span>
-                        <strong id="quote-debit" data-testid="fx-quote-debit">KES 0.00</strong>
+                        <strong id="quote-debit" data-testid="stb-quote-debit">KES 0.00</strong>
                     </div>
                     <div class="quote-line total">
                         <span>Beneficiary receives</span>
-                        <span id="quote-receive" data-testid="fx-quote-receive">USD 0.00</span>
+                        <span id="quote-receive" data-testid="stb-quote-receive">USD 0.00</span>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary" id="submit-btn" data-testid="fx-submit-button">
+                <button type="submit" class="btn-primary" id="submit-btn" data-testid="stb-submit-button">
                     Review &amp; Send Transfer
                 </button>
             </form>
         </section>
 
         <!-- Success Confirmation -->
-        <section class="card success-card" id="success-section" data-testid="fx-success-panel" aria-live="polite">
+        <section class="card success-card" id="success-section" data-testid="stb-success-panel" aria-live="polite">
             <div class="success-icon" aria-hidden="true">&#10003;</div>
-            <h2 data-testid="fx-success-heading">Transfer Submitted Successfully</h2>
+            <h2 data-testid="stb-success-heading">Transfer Submitted Successfully</h2>
             <p>Your cross-border transfer has been queued for processing. A confirmation SMS has been sent.</p>
-            <div class="receipt" data-testid="fx-success-receipt">
+            <div class="receipt" data-testid="stb-success-receipt">
                 <div class="quote-line"><span>Reference No.</span><strong id="receipt-ref"
-                        data-testid="fx-receipt-ref">—</strong></div>
+                        data-testid="stb-receipt-ref">—</strong></div>
                 <div class="quote-line"><span>Beneficiary</span><strong id="receipt-beneficiary">—</strong></div>
                 <div class="quote-line"><span>Amount sent</span><strong id="receipt-sent">—</strong></div>
                 <div class="quote-line"><span>Beneficiary receives</span><strong id="receipt-received"
-                        data-testid="fx-receipt-received">—</strong></div>
+                        data-testid="stb-receipt-received">—</strong></div>
                 <div class="quote-line"><span>New KES balance</span><strong id="receipt-balance"
-                        data-testid="fx-receipt-balance">—</strong></div>
+                        data-testid="stb-receipt-balance">—</strong></div>
             </div>
-            <button type="button" class="btn-secondary" id="new-transfer-btn" data-testid="fx-new-transfer-button">
+            <button type="button" class="btn-secondary" id="new-transfer-btn" data-testid="stb-new-transfer-button">
                 Make Another Transfer
             </button>
         </section>
 
         <!-- Recent Transactions -->
         <section class="card transactions-card" aria-labelledby="transactions-heading"
-            data-testid="fx-transactions-panel">
+            data-testid="stb-transactions-panel">
             <h2 id="transactions-heading">Recent Transactions &mdash; Current Account</h2>
             <table class="tx-table" aria-label="Recent transactions">
                 <thead>
@@ -666,25 +752,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-testid="fx-transaction-row">
+                    <tr data-testid="stb-transaction-row">
                         <td>05 Sep 2026</td>
                         <td>Salary &mdash; Acme Industries Ltd</td>
                         <td>SAL-082026</td>
                         <td class="tx-amount-credit">+320,000.00</td>
                     </tr>
-                    <tr data-testid="fx-transaction-row">
+                    <tr data-testid="stb-transaction-row">
                         <td>03 Sep 2026</td>
                         <td>KPLC Electricity</td>
                         <td>UTIL-99213</td>
                         <td class="tx-amount-debit">-8,420.00</td>
                     </tr>
-                    <tr data-testid="fx-transaction-row">
+                    <tr data-testid="stb-transaction-row">
                         <td>01 Sep 2026</td>
                         <td>Transfer to Savings &bull;&bull;7810</td>
                         <td>TRF-INT-5540</td>
                         <td class="tx-amount-debit">-150,000.00</td>
                     </tr>
-                    <tr data-testid="fx-transaction-row">
+                    <tr data-testid="stb-transaction-row">
                         <td>29 Aug 2026</td>
                         <td>Naivas Supermarket</td>
                         <td>POS-77120</td>
@@ -709,7 +795,7 @@
         let balanceKes = 1250000.0;
 
         // --- Elements ---
-        const form = document.getElementById("fx-form");
+        const form = document.getElementById("stb-form");
         const amountInput = document.getElementById("amount");
         const currencySelect = document.getElementById("currency");
         const beneficiaryInput = document.getElementById("beneficiary-name");
@@ -719,7 +805,7 @@
 
         const fmtKes = (n) =>
             "KES " + n.toLocaleString("en-KE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const fmtFx = (n, ccy) =>
+        const fmtCcy = (n, ccy) =>
             ccy + " " + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         function renderBalance() {
@@ -740,7 +826,7 @@
             document.getElementById("quote-fee").textContent = fmtKes(fee);
             document.getElementById("quote-swift").textContent = fmtKes(amount > 0 ? SWIFT_CHARGE_KES : 0);
             document.getElementById("quote-debit").textContent = fmtKes(totalDebit);
-            document.getElementById("quote-receive").textContent = fmtFx(received, ccy);
+            document.getElementById("quote-receive").textContent = fmtCcy(received, ccy);
 
             return { amount, ccy, rate, fee, totalDebit, received };
         }
@@ -800,11 +886,11 @@
             balanceKes -= quote.totalDebit;
             renderBalance();
 
-            const ref = "STB-FX-" + Date.now().toString(36).toUpperCase();
+            const ref = "STB-TRF-" + Date.now().toString(36).toUpperCase();
             document.getElementById("receipt-ref").textContent = ref;
             document.getElementById("receipt-beneficiary").textContent = beneficiaryInput.value.trim();
             document.getElementById("receipt-sent").textContent = fmtKes(quote.amount);
-            document.getElementById("receipt-received").textContent = fmtFx(quote.received, quote.ccy);
+            document.getElementById("receipt-received").textContent = fmtCcy(quote.received, quote.ccy);
             document.getElementById("receipt-balance").textContent = fmtKes(balanceKes);
 
             document.getElementById("transfer-section").style.display = "none";
@@ -817,6 +903,15 @@
             document.getElementById("success-section").classList.remove("visible");
             document.getElementById("transfer-section").style.display = "";
         });
+
+        // --- Quick actions ---
+        const quickStatus = document.getElementById("quick-status");
+        for (const btn of document.querySelectorAll(".quick-btn")) {
+            btn.addEventListener("click", () => {
+                quickStatus.textContent =
+                    btn.dataset.action + " request queued — you will receive an SMS confirmation.";
+            });
+        }
 
         // --- Simulated live-rate drift for demo realism ---
         // Math.random is safe here: cosmetic demo drift only, never a security value.

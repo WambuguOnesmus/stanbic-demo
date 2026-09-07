@@ -1,7 +1,7 @@
 # Skill: Stanbic React Component Scaffolding
 
 Use this skill whenever creating or refactoring React components for the
-Stanbic FX Portal (`src/components/**`).
+Stanbic Banking Portal (`src/components/**`).
 
 ## Component Contract
 
@@ -10,7 +10,7 @@ Every component must follow this exact structure:
 1. **Explicit TypeScript interface** for props, exported alongside the component:
 
    ```tsx
-   export interface FxRatePanelProps {
+   export interface RatePanelProps {
      /** ISO 4217 code of the destination currency. */
      currency: "USD" | "GBP" | "EUR";
      /** Mid-market rate quoted as KES -> currency. */
@@ -22,16 +22,16 @@ Every component must follow this exact structure:
 2. **Function component, named export**, no default exports, no `React.FC`:
 
    ```tsx
-   export function FxRatePanel({ currency, rate, onRefresh }: FxRatePanelProps) { … }
+   export function RatePanel({ currency, rate, onRefresh }: RatePanelProps) { … }
    ```
 
 3. **Kebab-case `data-testid` on every interactive or assertable element**, always
-   prefixed `fx-`:
+   prefixed `stb-`:
 
-   - Inputs: `data-testid="fx-amount-input"`, `data-testid="fx-currency-select"`
-   - Buttons: `data-testid="fx-submit-button"`
-   - Dynamic output: `data-testid="fx-quote-receive"`, `data-testid="fx-form-error"`
-   - Containers used in assertions: `data-testid="fx-quote-panel"`
+   - Inputs: `data-testid="stb-amount-input"`, `data-testid="stb-currency-select"`
+   - Buttons: `data-testid="stb-submit-button"`
+   - Dynamic output: `data-testid="stb-quote-receive"`, `data-testid="stb-form-error"`
+   - Containers used in assertions: `data-testid="stb-quote-panel"`
 
 4. **Accessibility is mandatory**:
    - `<label htmlFor>` for every input; never placeholder-only labelling.
@@ -62,7 +62,7 @@ Every component must follow this exact structure:
 When scaffolding a component, always produce:
 
 - [ ] `src/components/<Name>.tsx` with exported props interface
-- [ ] Kebab-case `fx-*` test ids on all interactive elements
+- [ ] Kebab-case `stb-*` test ids on all interactive elements
 - [ ] A Page Object update or new POM class in `e2e/pages/`
 - [ ] A Playwright spec skeleton in `e2e/` covering the acceptance criteria
-- [ ] A Conventional Commit suggestion: `feat(fx): #<id> <description>`
+- [ ] A Conventional Commit suggestion: `feat(portal): #<id> <description>`

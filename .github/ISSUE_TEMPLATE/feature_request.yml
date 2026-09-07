@@ -1,21 +1,21 @@
-name: "🚀 Feature Request (FX Modernization)"
-description: "Propose a new feature for the Stanbic FX & Cross-Border Transfer Portal."
-title: "[FX-XXX] <Feature title>"
-labels: ["feature", "fx-portal", "triage"]
+name: "🚀 Feature Request (Portal Modernization)"
+description: "Propose a new feature for the Stanbic Banking Portal."
+title: "[STB-XXX] <Feature title>"
+labels: ["feature", "banking-portal", "triage"]
 projects: ["enterprise-org/1"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Stanbic FX Modernization — Feature Intake
+        ## Stanbic Portal Modernization — Feature Intake
         Complete every field. Items without a valid **Item ID** and **Acceptance Criteria** will be returned to the requester.
 
   - type: input
     id: item-id
     attributes:
       label: "Item ID"
-      description: "Backlog identifier used in branch names and commits (e.g. FX-101)."
-      placeholder: "FX-101"
+      description: "Backlog identifier used in branch names and commits (e.g. STB-101)."
+      placeholder: "STB-101"
     validations:
       required: true
 
@@ -37,7 +37,7 @@ body:
       label: "Business Value"
       description: "The measurable customer or business outcome this delivers."
       placeholder: |
-        e.g. Reduce FX transfer abandonment by surfacing the full fee breakdown
+        e.g. Reduce international transfer abandonment by surfacing the full fee breakdown
         before submission, targeting a 15% uplift in completed transfers.
     validations:
       required: true
@@ -72,7 +72,7 @@ body:
     attributes:
       label: "Technical Notes (optional)"
       description: "Known constraints, affected components, API dependencies."
-      placeholder: "e.g. Touches src/components/FxTransferWidget.tsx; rates come from the Treasury Rates API."
+      placeholder: "e.g. Touches src/components/TransferWidget.tsx; rates come from the Treasury Rates API."
 
   - type: checkboxes
     id: definition-of-ready

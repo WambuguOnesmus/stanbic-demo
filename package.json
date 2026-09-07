@@ -1,8 +1,8 @@
 {
-  "name": "stanbic-fx-portal",
+  "name": "stanbic-banking-portal",
   "version": "1.0.0",
   "private": true,
-  "description": "Stanbic Bank FX & Cross-Border Transfer Portal — GitHub Enterprise, GHAS & Copilot demonstration",
+  "description": "Stanbic Bank Banking Portal — GitHub Enterprise, GHAS & Copilot demonstration",
   "type": "module",
   "scripts": {
     "dev": "vite",

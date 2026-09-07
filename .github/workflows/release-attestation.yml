@@ -38,8 +38,8 @@ jobs:
 
             - name: Package build output
               run: |
-                  tar -czf stanbic-fx-portal-${{ github.ref_name }}.tar.gz dist/
-                  sha256sum stanbic-fx-portal-${{ github.ref_name }}.tar.gz > checksums.txt
+                  tar -czf stanbic-banking-portal-${{ github.ref_name }}.tar.gz dist/
+                  sha256sum stanbic-banking-portal-${{ github.ref_name }}.tar.gz > checksums.txt
 
             # ---------------------------------------------------------------
             # SPDX Software Bill of Materials — full dependency inventory for
@@ -50,33 +50,33 @@ jobs:
               with:
                   path: .
                   format: spdx-json
-                  output-file: sbom-stanbic-fx-portal.spdx.json
-                  artifact-name: sbom-stanbic-fx-portal.spdx.json
+                  output-file: sbom-stanbic-banking-portal.spdx.json
+                  artifact-name: sbom-stanbic-banking-portal.spdx.json
 
             # ---------------------------------------------------------------
             # Signed build provenance (SLSA) — cryptographic proof that this
             # artifact was built by THIS workflow from THIS commit.
             # Verify later with:
-            #   gh attestation verify stanbic-fx-portal-<tag>.tar.gz --owner enterprise-org
+            #   gh attestation verify stanbic-banking-portal-<tag>.tar.gz --owner enterprise-org
             # ---------------------------------------------------------------
             - name: Attest build provenance
               uses: actions/attest-build-provenance@v1
               with:
-                  subject-path: stanbic-fx-portal-${{ github.ref_name }}.tar.gz
+                  subject-path: stanbic-banking-portal-${{ github.ref_name }}.tar.gz
 
             - name: Attest SBOM to the artifact
               uses: actions/attest-sbom@v1
               with:
-                  subject-path: stanbic-fx-portal-${{ github.ref_name }}.tar.gz
-                  sbom-path: sbom-stanbic-fx-portal.spdx.json
+                  subject-path: stanbic-banking-portal-${{ github.ref_name }}.tar.gz
+                  sbom-path: sbom-stanbic-banking-portal.spdx.json
 
             - name: Upload release artifacts
               uses: actions/upload-artifact@v4
               with:
-                  name: stanbic-fx-portal-release
+                  name: stanbic-banking-portal-release
                   path: |
-                      stanbic-fx-portal-${{ github.ref_name }}.tar.gz
-                      sbom-stanbic-fx-portal.spdx.json
+                      stanbic-banking-portal-${{ github.ref_name }}.tar.gz
+                      sbom-stanbic-banking-portal.spdx.json
                       checksums.txt
                   retention-days: 90
 
@@ -86,6 +86,6 @@ jobs:
                   GH_TOKEN: ${{ github.token }}
               run: |
                   gh release upload "${{ github.ref_name }}" \
-                    stanbic-fx-portal-${{ github.ref_name }}.tar.gz \
-                    sbom-stanbic-fx-portal.spdx.json \
+                    stanbic-banking-portal-${{ github.ref_name }}.tar.gz \
+                    sbom-stanbic-banking-portal.spdx.json \
                     checksums.txt --clobber

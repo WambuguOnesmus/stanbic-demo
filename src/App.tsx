@@ -1,5 +1,6 @@
 import { AccountsOverview, type AccountSummary } from "./components/AccountsOverview";
-import { FxTransferWidget } from "./components/FxTransferWidget";
+import { QuickActions } from "./components/QuickActions";
+import { TransferWidget } from "./components/TransferWidget";
 import { RecentTransactions, type Transaction } from "./components/RecentTransactions";
 
 const LIVE_RATES = { USD: 0.00775, GBP: 0.00612, EUR: 0.00718 } as const;
@@ -31,7 +32,7 @@ export function App() {
           <span>Stanbic Bank — Banking Portal</span>
         </div>
         <span
-          data-testid="fx-env-pill"
+          data-testid="stb-env-pill"
           className="rounded-full border border-white/40 bg-white/10 px-4 py-1 text-xs uppercase tracking-widest"
         >
           React App · Demo Environment
@@ -40,7 +41,8 @@ export function App() {
 
       <main className="flex flex-col gap-6">
         <AccountsOverview accounts={ACCOUNTS} />
-        <FxTransferWidget initialBalanceKes={1_250_000} rates={LIVE_RATES} />
+        <QuickActions />
+        <TransferWidget initialBalanceKes={1_250_000} rates={LIVE_RATES} />
         <RecentTransactions transactions={RECENT_TRANSACTIONS} />
       </main>
 

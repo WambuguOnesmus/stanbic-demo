@@ -21,12 +21,12 @@ function formatSigned(amount: number): string {
 export function RecentTransactions({ transactions }: RecentTransactionsProps) {
   return (
     <section
-      aria-labelledby="fx-transactions-heading"
-      data-testid="fx-transactions-panel"
+      aria-labelledby="stb-transactions-heading"
+      data-testid="stb-transactions-panel"
       className="rounded-xl bg-white p-6 shadow-lg"
     >
       <h2
-        id="fx-transactions-heading"
+        id="stb-transactions-heading"
         className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-500"
       >
         Recent Transactions — Current Account
@@ -42,7 +42,7 @@ export function RecentTransactions({ transactions }: RecentTransactionsProps) {
         </thead>
         <tbody>
           {transactions.map((tx) => (
-            <tr key={tx.reference} data-testid="fx-transaction-row" className="even:bg-slate-50">
+            <tr key={tx.reference} data-testid="stb-transaction-row" className="even:bg-slate-50">
               <td className="px-3 py-2">{tx.date}</td>
               <td className="px-3 py-2">{tx.description}</td>
               <td className="px-3 py-2">{tx.reference}</td>

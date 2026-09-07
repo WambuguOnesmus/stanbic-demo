@@ -1,21 +1,21 @@
 import type { Locator, Page } from "@playwright/test";
 
-export type FxCurrency = "USD" | "GBP" | "EUR";
+export type Currency = "USD" | "GBP" | "EUR";
 
 export interface TransferDetails {
   amountKes: number;
-  currency: FxCurrency;
+  currency: Currency;
   beneficiaryName: string;
   iban: string;
   reference?: string;
 }
 
 /**
- * Page Object Model for the FX & Cross-Border Transfer portal.
+ * Page Object Model for the Banking Portal portal.
  * All selectors use data-testid per Stanbic testability standards —
  * never CSS classes or visible text.
  */
-export class FxTransferPage {
+export class TransferPage {
   readonly page: Page;
 
   readonly accountBalance: Locator;
@@ -42,27 +42,27 @@ export class FxTransferPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.accountBalance = page.getByTestId("fx-account-balance");
-    this.amountInput = page.getByTestId("fx-amount-input");
-    this.currencySelect = page.getByTestId("fx-currency-select");
-    this.beneficiaryNameInput = page.getByTestId("fx-beneficiary-name");
-    this.ibanInput = page.getByTestId("fx-iban-input");
-    this.referenceInput = page.getByTestId("fx-reference-input");
-    this.quotePanel = page.getByTestId("fx-quote-panel");
-    this.quoteRate = page.getByTestId("fx-quote-rate");
-    this.quoteFee = page.getByTestId("fx-quote-fee");
-    this.quoteSwift = page.getByTestId("fx-quote-swift");
-    this.quoteDebit = page.getByTestId("fx-quote-debit");
-    this.quoteReceive = page.getByTestId("fx-quote-receive");
-    this.submitButton = page.getByTestId("fx-submit-button");
-    this.formError = page.getByTestId("fx-form-error");
-    this.amountError = page.getByTestId("fx-amount-error");
-    this.successPanel = page.getByTestId("fx-success-panel");
-    this.successHeading = page.getByTestId("fx-success-heading");
-    this.receiptRef = page.getByTestId("fx-receipt-ref");
-    this.receiptReceived = page.getByTestId("fx-receipt-received");
-    this.receiptBalance = page.getByTestId("fx-receipt-balance");
-    this.newTransferButton = page.getByTestId("fx-new-transfer-button");
+    this.accountBalance = page.getByTestId("stb-account-balance");
+    this.amountInput = page.getByTestId("stb-amount-input");
+    this.currencySelect = page.getByTestId("stb-currency-select");
+    this.beneficiaryNameInput = page.getByTestId("stb-beneficiary-name");
+    this.ibanInput = page.getByTestId("stb-iban-input");
+    this.referenceInput = page.getByTestId("stb-reference-input");
+    this.quotePanel = page.getByTestId("stb-quote-panel");
+    this.quoteRate = page.getByTestId("stb-quote-rate");
+    this.quoteFee = page.getByTestId("stb-quote-fee");
+    this.quoteSwift = page.getByTestId("stb-quote-swift");
+    this.quoteDebit = page.getByTestId("stb-quote-debit");
+    this.quoteReceive = page.getByTestId("stb-quote-receive");
+    this.submitButton = page.getByTestId("stb-submit-button");
+    this.formError = page.getByTestId("stb-form-error");
+    this.amountError = page.getByTestId("stb-amount-error");
+    this.successPanel = page.getByTestId("stb-success-panel");
+    this.successHeading = page.getByTestId("stb-success-heading");
+    this.receiptRef = page.getByTestId("stb-receipt-ref");
+    this.receiptReceived = page.getByTestId("stb-receipt-received");
+    this.receiptBalance = page.getByTestId("stb-receipt-balance");
+    this.newTransferButton = page.getByTestId("stb-new-transfer-button");
   }
 
   async goto(): Promise<void> {
@@ -90,10 +90,10 @@ export class FxTransferPage {
 
   async readQuote(): Promise<{ fee: number; swift: number; debit: number; receive: number }> {
     return {
-      fee: FxTransferPage.parseMoney((await this.quoteFee.textContent()) ?? ""),
-      swift: FxTransferPage.parseMoney((await this.quoteSwift.textContent()) ?? ""),
-      debit: FxTransferPage.parseMoney((await this.quoteDebit.textContent()) ?? ""),
-      receive: FxTransferPage.parseMoney((await this.quoteReceive.textContent()) ?? ""),
+      fee: TransferPage.parseMoney((await this.quoteFee.textContent()) ?? ""),
+      swift: TransferPage.parseMoney((await this.quoteSwift.textContent()) ?? ""),
+      debit: TransferPage.parseMoney((await this.quoteDebit.textContent()) ?? ""),
+      receive: TransferPage.parseMoney((await this.quoteReceive.textContent()) ?? ""),
     };
   }
 }

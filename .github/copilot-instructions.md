@@ -1,16 +1,16 @@
-# Stanbic FX Modernization — Copilot Developer Guidelines
+# Stanbic Portal Modernization — Copilot Developer Guidelines
 
-You are assisting engineers on the Stanbic Bank FX & Cross-Border Transfer Portal,
+You are assisting engineers on the Stanbic Bank Banking Portal,
 a regulated retail banking application. Apply every rule below to all generated
 code, commit messages, and reviews.
 
 ## Git & Workflow Conventions
 
 - **Conventional Commits are mandatory**, scoped and linked to the backlog Item ID:
-  - `feat(fx): #<id> <imperative description>` — e.g. `feat(fx): #101 add live fee breakdown to quote panel`
-  - `fix(fx): #<id> …`, `test(fx): #<id> …`, `chore(ci): …`
-- **Branch naming**: `feature/FX-<id>-<kebab-slug>` — e.g. `feature/FX-101-fee-breakdown`.
-  Defect branches use `fix/FX-<id>-<kebab-slug>`.
+  - `feat(portal): #<id> <imperative description>` — e.g. `feat(portal): #101 add live fee breakdown to quote panel`
+  - `fix(portal): #<id> …`, `test(portal): #<id> …`, `chore(ci): …`
+- **Branch naming**: `feature/STB-<id>-<kebab-slug>` — e.g. `feature/STB-101-fee-breakdown`.
+  Defect branches use `fix/STB-<id>-<kebab-slug>`.
 - Every PR must link its issue (`Closes #<n>`) and complete the banking compliance checklist.
 - Never suggest force-pushing to `main` or bypassing status checks.
 
@@ -37,8 +37,8 @@ code, commit messages, and reviews.
 ## Testability (non-negotiable)
 
 - **Every interactive element MUST carry a `data-testid` attribute** using
-  kebab-case with the `fx-` prefix: `data-testid="fx-amount-input"`,
-  `data-testid="fx-submit-button"`, `data-testid="fx-success-panel"`.
+  kebab-case with the `stb-` prefix: `data-testid="stb-amount-input"`,
+  `data-testid="stb-submit-button"`, `data-testid="stb-success-panel"`.
 - Playwright tests select exclusively via `getByTestId` — never CSS classes or text.
 - Generate/extend Playwright Page Object Model classes in `e2e/pages/` when
   adding new UI surface area.

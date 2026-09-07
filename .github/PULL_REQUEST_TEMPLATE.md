@@ -1,4 +1,4 @@
-# Pull Request — Stanbic FX Modernization
+# Pull Request — Stanbic Portal Modernization
 
 ## Summary
 
@@ -7,9 +7,9 @@
 
 ## Linked Issue
 
-Closes #<!-- Item ID issue number, e.g. Closes #42 (FX-101) -->
+Closes #<!-- Item ID issue number, e.g. Closes #42 (STB-101) -->
 
-> PRs without a linked issue will be closed. Branch must follow `feature/FX-<id>-<slug>`.
+> PRs without a linked issue will be closed. Branch must follow `feature/STB-<id>-<slug>`.
 
 ## Type of Change
 
@@ -26,7 +26,7 @@ Closes #<!-- Item ID issue number, e.g. Closes #42 (FX-101) -->
 ### 1. Architecture Compliance
 - [ ] Change conforms to the approved component architecture (no new direct calls into `src/core-ledger/**`)
 - [ ] TypeScript `strict` mode passes with zero suppressions (`// @ts-ignore` requires lead sign-off)
-- [ ] All new interactive elements expose `data-testid="fx-<element>"` selectors
+- [ ] All new interactive elements expose `data-testid="stb-<element>"` selectors
 - [ ] Tailwind design tokens used — no hard-coded hex colours
 
 ### 2. Security (GHAS / CodeQL)
@@ -47,7 +47,7 @@ Closes #<!-- Item ID issue number, e.g. Closes #42 (FX-101) -->
 
 ### 5. Review & Sign-off
 - [ ] At least one approval from `@enterprise-org/core-banking-leads` (enforced via CODEOWNERS)
-- [ ] Commits are signed and follow Conventional Commits (`feat(fx): #<id> <description>`)
+- [ ] Commits are signed and follow Conventional Commits (`feat(portal): #<id> <description>`)
 - [ ] Linear history maintained (rebase, no merge commits)
 
 ---

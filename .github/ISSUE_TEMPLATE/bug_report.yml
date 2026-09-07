@@ -1,19 +1,19 @@
-name: "🐞 Bug Report (FX Portal Defect)"
-description: "Report a defect in the Stanbic FX & Cross-Border Transfer Portal."
+name: "🐞 Bug Report (Banking Portal Defect)"
+description: "Report a defect in the Stanbic Banking Portal."
 title: "[BUG] <Short defect summary>"
-labels: ["bug", "fx-portal", "triage"]
+labels: ["bug", "banking-portal", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Stanbic FX Portal — Defect Report
+        ## Stanbic Banking Portal — Defect Report
         Severity 1 defects (money movement, security, data privacy) trigger the incident process — page the on-call lead after filing.
 
   - type: input
     id: item-id
     attributes:
       label: "Related Item ID (if known)"
-      placeholder: "FX-101"
+      placeholder: "STB-101"
 
   - type: dropdown
     id: severity
@@ -56,7 +56,7 @@ body:
     attributes:
       label: "Steps to Reproduce"
       placeholder: |
-        1. Open the FX transfer form
+        1. Open the international transfer form
         2. Enter 2,000,000 KES to USD
         3. Submit the form
     validations:

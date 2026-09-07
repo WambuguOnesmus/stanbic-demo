@@ -1,4 +1,4 @@
-# Stanbic Bank — FX & Cross-Border Transfer Portal
+# Stanbic Bank — Banking Portal
 
 GitHub Enterprise, GitHub Advanced Security (GHAS) and GitHub Copilot
 demonstration for Stanbic Bank: a regulated retail banking use case
@@ -31,10 +31,10 @@ npm run test:e2e   # Playwright E2E suite
 
 ## Delivery conventions
 
-- Branch: `feature/FX-<id>-<kebab-slug>` · Commit: `feat(fx): #<id> <description>`
+- Branch: `feature/STB-<id>-<kebab-slug>` · Commit: `feat(portal): #<id> <description>`
 - Merges to `main` require a PR, CODEOWNERS approval, and green
   **Playwright E2E**, **CodeQL**, and **Dependency Review** checks.
-- Every interactive element carries a kebab-case `data-testid="fx-*"` selector.
+- Every interactive element carries a kebab-case `data-testid="stb-*"` selector.
 
 > ⚠️ `src/utils/auditLogger.ts` contains **deliberate vulnerabilities** to
 > showcase CodeQL and Copilot Autofix. Do not reuse its patterns.

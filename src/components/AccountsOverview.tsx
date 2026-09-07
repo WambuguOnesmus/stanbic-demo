@@ -1,5 +1,5 @@
 export interface AccountSummary {
-  /** Stable id used in the data-testid suffix, e.g. "current" -> fx-account-card-current. */
+  /** Stable id used in the data-testid suffix, e.g. "current" -> stb-account-card-current. */
   id: string;
   label: string;
   /** Display-formatted balance, e.g. "KES 1,250,000.00". */
@@ -15,13 +15,13 @@ export function AccountsOverview({ accounts }: AccountsOverviewProps) {
   return (
     <section
       aria-label="Accounts overview"
-      data-testid="fx-accounts-overview"
+      data-testid="stb-accounts-overview"
       className="grid grid-cols-1 gap-4 sm:grid-cols-3"
     >
       {accounts.map((account) => (
         <div
           key={account.id}
-          data-testid={`fx-account-card-${account.id}`}
+          data-testid={`stb-account-card-${account.id}`}
           className="rounded-xl bg-white p-5 shadow-lg"
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">

@@ -8,10 +8,10 @@
 
 ## Act 0 — Setup (before the meeting)
 
-- [ ] Run `scripts/setup-gh-enterprise.sh enterprise-org stanbic-fx-portal`
+- [ ] Run `scripts/setup-gh-enterprise.sh enterprise-org stanbic-banking-portal`
 - [ ] Publish `public/prototype/index.html` to GitHub Pages; capture 2 clean screenshots
       (quote panel + success confirmation)
-- [ ] Create issue **FX-101** from the feature template with a screenshot attached
+- [ ] Create issue **STB-101** from the feature template with a screenshot attached
 - [ ] Pre-stage a branch with `src/utils/auditLogger.ts` changes so CodeQL alerts exist
 - [ ] Have a terminal ready with a fake `STB_LIVE_<32 chars>` token in an uncommitted file
 
@@ -23,7 +23,7 @@
 
 1. Open **New Issue → Feature Request**. Point out the enforced fields: *Item ID,
    Business Value, Acceptance Criteria, prototype screenshot upload, Definition of Ready.*
-2. Show the **Stanbic FX Modernization** project board with custom fields
+2. Show the **Stanbic Portal Modernization** project board with custom fields
    (Sprint, Item ID, Risk Tier).
 
 > **ROI line:** "Nothing enters your delivery pipeline without a risk tier and
@@ -41,7 +41,7 @@
    commit convention, strict TypeScript, mandatory `data-testid` — every
    suggestion Copilot makes is pre-shaped to your standards.
 3. **The showpiece:** open Copilot Chat, run the `implement-from-screenshot`
-   prompt against issue FX-101 with the prototype screenshot attached. Watch it
+   prompt against issue STB-101 with the prototype screenshot attached. Watch it
    scaffold the component **and** the Playwright spec, following house rules.
 
 > **ROI line:** "Copilot isn't a junior dev pasting from the internet — it's your
@@ -99,7 +99,7 @@
 3. Open a release run of `release-attestation.yml`: SPDX SBOM artifact + signed
    provenance. Run live:
    ```bash
-   gh attestation verify stanbic-fx-portal-v1.0.0.tar.gz --owner enterprise-org
+   gh attestation verify stanbic-banking-portal-v1.0.0.tar.gz --owner enterprise-org
    ```
 
 > **ROI line:** "When the regulator asks *'prove exactly what shipped and who

@@ -25,7 +25,7 @@
     },
     {
       "name": "Stanbic Treasury Rates API Key",
-      "description": "Keys for the internal Treasury Rates feed used by the FX quote engine.",
+      "description": "Keys for the internal Treasury Rates feed used by the rates quote engine.",
       "regex": "STB_RATES_KEY-[A-Fa-f0-9]{40}",
       "before_secret": "\\A|[^0-9A-Za-z_-]",
       "after_secret": "\\z|[^0-9A-Fa-f]",

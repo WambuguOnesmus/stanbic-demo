@@ -1,4 +1,4 @@
-# Stanbic FX Modernization — Code Ownership & Review Authority
+# Stanbic Portal Modernization — Code Ownership & Review Authority
 #
 # Later rules take precedence. Every protected path requires review from
 # the core banking leads before merge (enforced by branch protection:

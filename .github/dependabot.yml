@@ -1,4 +1,4 @@
-# Stanbic FX Portal — Dependabot configuration
+# Stanbic Banking Portal — Dependabot configuration
 # Automated vulnerability tracking + weekly version updates.
 version: 2
 updates:
@@ -13,7 +13,7 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
-      - "fx-portal"
+      - "banking-portal"
     commit-message:
       prefix: "chore(deps)"
     groups:

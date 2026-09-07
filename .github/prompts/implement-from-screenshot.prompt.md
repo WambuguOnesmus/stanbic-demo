@@ -1,16 +1,16 @@
 ---
 mode: agent
-description: "Implement a React component from a GitHub Issue's prototype screenshot (Stanbic FX Portal)"
+description: "Implement a React component from a GitHub Issue's prototype screenshot (Stanbic Banking Portal)"
 ---
 
-# Implement FX Feature From Issue Screenshot
+# Implement Portal Feature From Issue Screenshot
 
-You are implementing a feature for the Stanbic FX & Cross-Border Transfer Portal.
+You are implementing a feature for the Stanbic Banking Portal.
 
 ## Inputs
 
 - GitHub Issue: ${input:issueUrl:Paste the GitHub Issue URL or number}
-- The issue contains an **Item ID** (e.g. FX-101), **Acceptance Criteria**, and an
+- The issue contains an **Item ID** (e.g. STB-101), **Acceptance Criteria**, and an
   attached **prototype screenshot** which is the authoritative visual specification.
 
 ## Task
@@ -25,7 +25,7 @@ You are implementing a feature for the Stanbic FX & Cross-Border Transfer Portal
    and the `react-component` skill:
    - TypeScript strict mode with an exported props interface
    - Tailwind design tokens only (no hex values, no inline styles)
-   - Kebab-case `data-testid="fx-<element>"` on every interactive element
+   - Kebab-case `data-testid="stb-<element>"` on every interactive element
    - Accessible labels, `aria-live` quote updates, `role="alert"` errors
    - Input sanitization and insufficient-funds validation as shown in the prototype
 
@@ -33,8 +33,8 @@ You are implementing a feature for the Stanbic FX & Cross-Border Transfer Portal
    in `e2e/` asserting every acceptance criterion via `getByTestId`.
 
 4. **Propose the delivery plan**:
-   - Branch: `feature/FX-<id>-<kebab-slug>`
-   - Commit: `feat(fx): #<issue-number> <imperative description>`
+   - Branch: `feature/STB-<id>-<kebab-slug>`
+   - Commit: `feat(portal): #<issue-number> <imperative description>`
    - PR body pre-filled against the banking compliance checklist.
 
 Do not touch `src/core-ledger/**` or any `*.pem` file — these are excluded by policy.

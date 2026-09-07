@@ -23,9 +23,23 @@ test.describe("Stanbic Banking Portal — dashboard", () => {
     await expect(portal.transactionRows.first()).toContainText("+320,000.00");
   });
 
-  test("hosts the FX transfer widget on the dashboard", async ({ page }) => {
-    await expect(page.getByTestId("fx-amount-input")).toBeVisible();
-    await expect(page.getByTestId("fx-quote-panel")).toBeVisible();
-    await expect(page.getByTestId("fx-submit-button")).toBeVisible();
+  test("hosts the international transfer widget on the dashboard", async ({ page }) => {
+    await expect(page.getByTestId("stb-amount-input")).toBeVisible();
+    await expect(page.getByTestId("stb-quote-panel")).toBeVisible();
+    await expect(page.getByTestId("stb-submit-button")).toBeVisible();
+  });
+
+  test("shows all four quick actions", async () => {
+    await expect(portal.quickActionsPanel).toBeVisible();
+    for (const id of ["pay-bills", "buy-airtime", "download-statement", "deposit"]) {
+      await expect(portal.quickAction(id)).toBeVisible();
+    }
+  });
+
+  test("confirms a quick action request via the live status region", async () => {
+    await portal.quickAction("buy-airtime").click();
+    await expect(portal.actionStatus).toContainText(
+      "Buy Airtime request queued — you will receive an SMS confirmation.",
+    );
   });
 });
