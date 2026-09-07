@@ -4,7 +4,7 @@ GitHub Enterprise, GitHub Advanced Security (GHAS) and GitHub Copilot
 demonstration for Stanbic Bank: a regulated retail banking use case
 (KES → USD/GBP/EUR cross-border transfers) built end-to-end on the GitHub platform.
 
-**Live prototype (visual spec):** https://onesmus1024.github.io/stanbic-demo/public/prototype/index.html
+**Live prototype (visual spec):** https://wambuguonesmus.github.io/stanbic-demo/public/prototype/index.html
 
 ## Quick start
 
