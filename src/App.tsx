@@ -1,6 +1,21 @@
+import { AccountsOverview, type AccountSummary } from "./components/AccountsOverview";
 import { FxTransferWidget } from "./components/FxTransferWidget";
+import { RecentTransactions, type Transaction } from "./components/RecentTransactions";
 
 const LIVE_RATES = { USD: 0.00775, GBP: 0.00612, EUR: 0.00718 } as const;
+
+const ACCOUNTS: readonly AccountSummary[] = [
+  { id: "current", label: "Current Account", balance: "KES 1,250,000.00", maskedNumber: "•••• 4521" },
+  { id: "savings", label: "Savings Account", balance: "KES 3,480,200.55", maskedNumber: "•••• 7810" },
+  { id: "usd", label: "USD Account", balance: "USD 12,940.10", maskedNumber: "•••• 2093" },
+];
+
+const RECENT_TRANSACTIONS: readonly Transaction[] = [
+  { date: "05 Sep 2026", description: "Salary — Acme Industries Ltd", reference: "SAL-082026", amountKes: 320_000 },
+  { date: "03 Sep 2026", description: "KPLC Electricity", reference: "UTIL-99213", amountKes: -8_420 },
+  { date: "01 Sep 2026", description: "Transfer to Savings ••7810", reference: "TRF-INT-5540", amountKes: -150_000 },
+  { date: "29 Aug 2026", description: "Naivas Supermarket", reference: "POS-77120", amountKes: -12_845.5 },
+];
 
 export function App() {
   return (
@@ -13,7 +28,7 @@ export function App() {
           >
             S
           </span>
-          <span>Stanbic Bank — FX Portal</span>
+          <span>Stanbic Bank — Banking Portal</span>
         </div>
         <span
           data-testid="fx-env-pill"
@@ -23,12 +38,14 @@ export function App() {
         </span>
       </header>
 
-      <main>
+      <main className="flex flex-col gap-6">
+        <AccountsOverview accounts={ACCOUNTS} />
         <FxTransferWidget initialBalanceKes={1_250_000} rates={LIVE_RATES} />
+        <RecentTransactions transactions={RECENT_TRANSACTIONS} />
       </main>
 
       <footer className="text-center text-xs text-white/60">
-        Stanbic Bank Kenya — FX Modernization. Rates are indicative and for demonstration only.
+        Stanbic Bank Kenya — Banking Portal. Rates are indicative and for demonstration only.
       </footer>
     </div>
   );
