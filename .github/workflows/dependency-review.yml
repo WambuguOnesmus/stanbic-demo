@@ -21,7 +21,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Dependency Review (block vulnerable packages at the PR gate)
-              uses: actions/dependency-review-action@v4
+              uses: actions/dependency-review-action@v5
               with:
                   # Block on any known vulnerability of moderate severity or higher
                   fail-on-severity: moderate
