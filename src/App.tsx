@@ -1,4 +1,41 @@
+import { useCallback, useState } from "react";
+import { AccountsOverview, type AccountSummary } from "./components/AccountsOverview";
+import { QuickActions } from "./components/QuickActions";
+import { RecentTransactions, type Transaction } from "./components/RecentTransactions";
+
+const OPENING_BALANCE_KES = 1_250_000;
+
+const SEEDED_TRANSACTIONS: readonly Transaction[] = [
+  { date: "05 Sep 2026", description: "Salary — Acme Industries Ltd", reference: "SAL-082026", amountKes: 320_000 },
+  { date: "03 Sep 2026", description: "KPLC Electricity", reference: "UTIL-99213", amountKes: -8_420 },
+  { date: "01 Sep 2026", description: "Transfer to Savings ••7810", reference: "TRF-INT-5540", amountKes: -150_000 },
+  { date: "29 Aug 2026", description: "Naivas Supermarket", reference: "POS-77120", amountKes: -12_845.5 },
+];
+
+function formatKes(amount: number): string {
+  return `KES ${amount.toLocaleString("en-KE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
 export function App() {
+  // Shared account state: every money feature debits/credits and records here.
+  const [balanceKes, setBalanceKes] = useState<number>(OPENING_BALANCE_KES);
+  const [transactions, setTransactions] = useState<readonly Transaction[]>(SEEDED_TRANSACTIONS);
+
+  // Journey launchers (#11–#13, #15) call this to credit/debit and prepend activity.
+  const recordTransaction = useCallback((transaction: Transaction) => {
+    setBalanceKes((current) => current + transaction.amountKes);
+    setTransactions((current) => [transaction, ...current]);
+  }, []);
+
+  const accounts: readonly AccountSummary[] = [
+    { id: "current", label: "Current Account", balance: formatKes(balanceKes), maskedNumber: "•••• 4521" },
+    { id: "savings", label: "Savings Account", balance: "KES 3,480,200.55", maskedNumber: "•••• 7810" },
+    { id: "usd", label: "USD Account", balance: "USD 12,940.10", maskedNumber: "•••• 2093" },
+  ];
+
   return (
     <div className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-8">
       <header className="flex items-center justify-between text-white">
@@ -19,29 +56,10 @@ export function App() {
         </span>
       </header>
 
-      <main className="grid flex-1 place-items-center">
-        <section
-          data-testid="stb-coming-soon"
-          className="max-w-lg rounded-xl bg-white p-12 text-center shadow-lg"
-        >
-          <span aria-hidden="true" className="mb-4 block text-5xl">
-            🏗️
-          </span>
-          <h1 className="mb-3 text-2xl font-extrabold text-stanbic-navy">
-            Banking Portal Coming Soon
-          </h1>
-          <p className="mb-6 text-sm text-slate-600">
-            The portal is being built feature by feature from the approved prototype. Track
-            progress on the project board — each feature ships from its own issue.
-          </p>
-          <a
-            href="/prototype/index.html"
-            data-testid="stb-prototype-link"
-            className="inline-block rounded-lg bg-stanbic-royal px-6 py-3 font-bold text-white transition hover:bg-stanbic-navy focus-visible:ring-2 focus-visible:ring-stanbic-accent"
-          >
-            View the Approved Prototype
-          </a>
-        </section>
+      <main className="flex flex-col gap-6">
+        <AccountsOverview accounts={accounts} />
+        <QuickActions />
+        <RecentTransactions transactions={transactions} />
       </main>
 
       <footer className="text-center text-xs text-white/60">
