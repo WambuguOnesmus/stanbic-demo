@@ -8,4 +8,3 @@ test-results/
 *.key
 
 .playwright-mcp/
-e2e/plans/
