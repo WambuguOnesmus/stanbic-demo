@@ -558,6 +558,151 @@
             font-weight: 600;
             color: var(--success);
         }
+
+        /* ---- Send money ---- */
+        .sendmoney-card {
+            grid-column: 1 / -1;
+        }
+
+        .sendmoney-card h2 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+        }
+
+        .status-line {
+            grid-column: 1 / -1;
+            min-height: 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* ---- Deposit modal ---- */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(10, 34, 64, 0.7);
+            place-items: center;
+            padding: 1rem;
+        }
+
+        .modal-backdrop.visible {
+            display: grid;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 430px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: 0 16px 48px rgba(10, 34, 64, 0.35);
+            padding: 1.5rem;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .modal-head h2 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--stanbic-royal);
+        }
+
+        .modal-close {
+            border: none;
+            background: none;
+            font-size: 1.4rem;
+            line-height: 1;
+            color: var(--gray-600);
+            cursor: pointer;
+        }
+
+        .steps {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+            margin-bottom: 1.25rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .steps li {
+            flex: 1;
+            text-align: center;
+            padding: 0.3rem 0.5rem;
+            border-radius: 999px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            text-transform: capitalize;
+        }
+
+        .steps li[aria-current="step"] {
+            background: var(--stanbic-royal);
+            color: var(--white);
+        }
+
+        .modal-step {
+            display: none;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .modal-step.active {
+            display: flex;
+        }
+
+        .review-box {
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+        }
+
+        .review-box .quote-line strong {
+            color: var(--stanbic-navy);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .modal-actions .btn-primary,
+        .modal-actions .btn-secondary {
+            flex: 1;
+            margin-top: 0;
+        }
+
+        .success-mini {
+            text-align: center;
+        }
+
+        .success-mini .success-icon {
+            width: 56px;
+            height: 56px;
+            font-size: 1.6rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .success-mini p {
+            margin-bottom: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .success-mini .ref {
+            color: var(--stanbic-navy);
+            font-weight: 800;
+        }
     </style>
 </head>
 
@@ -737,6 +882,44 @@
             </button>
         </section>
 
+        <!-- Send Money (Local) -->
+        <section class="card sendmoney-card" aria-labelledby="sendmoney-heading" data-testid="stb-sendmoney-panel">
+            <h2 id="sendmoney-heading">Send Money &mdash; Local (flat fee KES 50.00)</h2>
+            <form id="sm-form" class="form-grid" novalidate>
+                <div class="form-error-banner" id="sm-error" role="alert" data-testid="stb-sendmoney-error"></div>
+
+                <div class="field">
+                    <label for="sm-recipient">Recipient Name</label>
+                    <input type="text" id="sm-recipient" maxlength="70" placeholder="Full name"
+                        data-testid="stb-sendmoney-recipient" required />
+                    <span class="field-error" id="sm-recipient-error"
+                        data-testid="stb-sendmoney-recipient-error"></span>
+                </div>
+
+                <div class="field">
+                    <label for="sm-mobile">Mobile Number</label>
+                    <input type="tel" id="sm-mobile" maxlength="13" placeholder="07XX XXX XXX"
+                        data-testid="stb-sendmoney-mobile" required />
+                    <span class="field-error" id="sm-mobile-error" data-testid="stb-sendmoney-mobile-error"></span>
+                </div>
+
+                <div class="field">
+                    <label for="sm-amount">Amount (KES)</label>
+                    <input type="number" id="sm-amount" min="10" step="0.01" placeholder="e.g. 5,000"
+                        inputmode="decimal" data-testid="stb-sendmoney-amount" required />
+                    <span class="field-error" id="sm-amount-error" data-testid="stb-sendmoney-amount-error"></span>
+                </div>
+
+                <div class="field" style="justify-content:flex-end">
+                    <button type="submit" class="btn-primary" data-testid="stb-sendmoney-submit">
+                        Send Money
+                    </button>
+                </div>
+
+                <p class="status-line" aria-live="polite" id="sm-status" data-testid="stb-sendmoney-status"></p>
+            </form>
+        </section>
+
         <!-- Recent Transactions -->
         <section class="card transactions-card" aria-labelledby="transactions-heading"
             data-testid="stb-transactions-panel">
@@ -783,6 +966,76 @@
     <footer>
         Stanbic Bank Kenya &mdash; Banking Portal Prototype. Rates are indicative and for demonstration only.
     </footer>
+
+    <!-- Deposit Modal (multi-step) -->
+    <div class="modal-backdrop" id="dep-backdrop" data-testid="stb-deposit-backdrop">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dep-heading"
+            data-testid="stb-deposit-modal">
+            <div class="modal-head">
+                <h2 id="dep-heading">Deposit &mdash; Current Account</h2>
+                <button type="button" class="modal-close" aria-label="Close deposit dialog" id="dep-close"
+                    data-testid="stb-deposit-close">&times;</button>
+            </div>
+
+            <ol class="steps" aria-label="Deposit progress">
+                <li id="dep-step-pill-details" data-testid="stb-deposit-step-details" aria-current="step">1. Details
+                </li>
+                <li id="dep-step-pill-review" data-testid="stb-deposit-step-review">2. Review</li>
+                <li id="dep-step-pill-success" data-testid="stb-deposit-step-success">3. Success</li>
+            </ol>
+
+            <!-- Step 1: details -->
+            <div class="modal-step active" id="dep-step-details">
+                <div class="field">
+                    <label for="dep-amount">Amount (KES)</label>
+                    <input type="number" id="dep-amount" min="100" step="0.01" inputmode="decimal"
+                        placeholder="e.g. 50,000" data-testid="stb-deposit-amount" required />
+                    <span class="field-error" id="dep-error" role="alert" data-testid="stb-deposit-error"></span>
+                </div>
+                <div class="field">
+                    <label for="dep-source">Source</label>
+                    <select id="dep-source" data-testid="stb-deposit-source">
+                        <option value="Cash" selected>Cash</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="M-PESA">M-PESA</option>
+                    </select>
+                </div>
+                <button type="button" class="btn-primary" id="dep-next" data-testid="stb-deposit-next">
+                    Continue to Review
+                </button>
+            </div>
+
+            <!-- Step 2: review -->
+            <div class="modal-step" id="dep-step-review">
+                <div class="review-box">
+                    <div class="quote-line"><span>Amount</span><strong id="dep-review-amount"
+                            data-testid="stb-deposit-review-amount">&mdash;</strong></div>
+                    <div class="quote-line"><span>Source</span><strong id="dep-review-source"
+                            data-testid="stb-deposit-review-source">&mdash;</strong></div>
+                    <div class="quote-line"><span>Credited to</span><strong>Current Account &bull;&bull;&bull;&bull;
+                            4521</strong></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="dep-back"
+                        data-testid="stb-deposit-back">Back</button>
+                    <button type="button" class="btn-primary" id="dep-confirm" data-testid="stb-deposit-confirm">
+                        Confirm Deposit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: success -->
+            <div class="modal-step success-mini" id="dep-step-success" aria-live="polite"
+                data-testid="stb-deposit-success">
+                <div class="success-icon" aria-hidden="true">&#10003;</div>
+                <p><strong style="color:var(--success)">Deposit Recorded</strong></p>
+                <p id="dep-success-summary">&mdash;</p>
+                <p>Reference <span class="ref" id="dep-reference" data-testid="stb-deposit-reference">&mdash;</span>
+                </p>
+                <button type="button" class="btn-primary" id="dep-done" data-testid="stb-deposit-done">Done</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         "use strict";
@@ -907,10 +1160,145 @@
         const quickStatus = document.getElementById("quick-status");
         for (const btn of document.querySelectorAll(".quick-btn")) {
             btn.addEventListener("click", () => {
+                if (btn.dataset.action === "Deposit") {
+                    openDepositModal();
+                    return;
+                }
                 quickStatus.textContent =
                     btn.dataset.action + " request queued — you will receive an SMS confirmation.";
             });
         }
+
+        // --- Transaction recording ---
+        const txBody = document.querySelector(".tx-table tbody");
+        function todayLabel() {
+            return new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+        }
+        function addTransaction(description, reference, amount) {
+            const row = document.createElement("tr");
+            row.setAttribute("data-testid", "stb-transaction-row");
+            const cls = amount < 0 ? "tx-amount-debit" : "tx-amount-credit";
+            const sign = amount < 0 ? "-" : "+";
+            const cells = [todayLabel(), description, reference];
+            for (const text of cells) {
+                const td = document.createElement("td");
+                td.textContent = text;
+                row.appendChild(td);
+            }
+            const amountTd = document.createElement("td");
+            amountTd.className = cls;
+            amountTd.textContent = sign + Math.abs(amount).toLocaleString("en-KE",
+                { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            row.appendChild(amountTd);
+            txBody.prepend(row);
+        }
+
+        // --- Send money (local) ---
+        const SEND_FEE_KES = 50;
+        const smForm = document.getElementById("sm-form");
+        const smRecipient = document.getElementById("sm-recipient");
+        const smMobile = document.getElementById("sm-mobile");
+        const smAmount = document.getElementById("sm-amount");
+        const smError = document.getElementById("sm-error");
+        const smStatus = document.getElementById("sm-status");
+
+        smForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            smStatus.textContent = "";
+            smError.classList.remove("visible");
+            smError.textContent = "";
+
+            let valid = true;
+            valid &= setFieldError(smRecipient, document.getElementById("sm-recipient-error"),
+                !/^[A-Za-z][A-Za-z .'-]{2,69}$/.test(smRecipient.value.trim())
+                    ? "Enter the recipient's full name." : "");
+            valid &= setFieldError(smMobile, document.getElementById("sm-mobile-error"),
+                !/^(?:\+?254|0)7\d{8}$/.test(smMobile.value.replace(/\s+/g, ""))
+                    ? "Enter a valid Kenyan mobile number (07XX XXX XXX)." : "");
+            const amount = Number.parseFloat(smAmount.value) || 0;
+            valid &= setFieldError(smAmount, document.getElementById("sm-amount-error"),
+                amount < 10 ? "Enter an amount of at least KES 10." : "");
+            if (!valid) return;
+
+            const totalDebit = amount + SEND_FEE_KES;
+            if (totalDebit > balanceKes) {
+                smError.textContent = "Insufficient funds: total debit " + fmtKes(totalDebit) +
+                    " (incl. " + fmtKes(SEND_FEE_KES) + " fee) exceeds your available balance of " +
+                    fmtKes(balanceKes) + ".";
+                smError.classList.add("visible");
+                return;
+            }
+
+            balanceKes -= totalDebit;
+            renderBalance();
+            const ref = "STB-SM-" + Date.now().toString(36).toUpperCase();
+            addTransaction("Send Money — " + smRecipient.value.trim(), ref, -totalDebit);
+            smStatus.textContent = fmtKes(amount) + " sent to " + smRecipient.value.trim() +
+                " (" + smMobile.value.trim() + ") — reference " + ref + ".";
+            smForm.reset();
+        });
+
+        // --- Deposit modal (multi-step) ---
+        const depBackdrop = document.getElementById("dep-backdrop");
+        const depAmount = document.getElementById("dep-amount");
+        const depSource = document.getElementById("dep-source");
+        const depError = document.getElementById("dep-error");
+        const depReference = document.getElementById("dep-reference");
+        const DEP_STEPS = ["details", "review", "success"];
+
+        function showDepositStep(step) {
+            for (const s of DEP_STEPS) {
+                document.getElementById("dep-step-" + s).classList.toggle("active", s === step);
+                const pill = document.getElementById("dep-step-pill-" + s);
+                if (s === step) { pill.setAttribute("aria-current", "step"); }
+                else { pill.removeAttribute("aria-current"); }
+            }
+        }
+
+        function openDepositModal() {
+            depAmount.value = "";
+            depSource.value = "Cash";
+            depError.textContent = "";
+            showDepositStep("details");
+            depBackdrop.classList.add("visible");
+            depAmount.focus();
+        }
+
+        function closeDepositModal() {
+            depBackdrop.classList.remove("visible");
+        }
+
+        document.getElementById("dep-next").addEventListener("click", () => {
+            const amount = Number.parseFloat(depAmount.value) || 0;
+            if (amount < 100) {
+                depError.textContent = "Enter a deposit of at least KES 100.";
+                return;
+            }
+            depError.textContent = "";
+            document.getElementById("dep-review-amount").textContent = fmtKes(amount);
+            document.getElementById("dep-review-source").textContent = depSource.value;
+            showDepositStep("review");
+        });
+
+        document.getElementById("dep-back").addEventListener("click", () => showDepositStep("details"));
+
+        document.getElementById("dep-confirm").addEventListener("click", () => {
+            const amount = Number.parseFloat(depAmount.value) || 0;
+            const ref = "STB-DEP-" + Date.now().toString(36).toUpperCase();
+            balanceKes += amount;
+            renderBalance();
+            addTransaction(depSource.value + " Deposit", ref, amount);
+            depReference.textContent = ref;
+            document.getElementById("dep-success-summary").textContent =
+                depSource.value + " deposit of " + fmtKes(amount) + " has been credited.";
+            showDepositStep("success");
+        });
+
+        document.getElementById("dep-done").addEventListener("click", closeDepositModal);
+        document.getElementById("dep-close").addEventListener("click", closeDepositModal);
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && depBackdrop.classList.contains("visible")) closeDepositModal();
+        });
 
         // --- Simulated live-rate drift for demo realism ---
         // Math.random is safe here: cosmetic demo drift only, never a security value.
