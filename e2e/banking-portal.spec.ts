@@ -42,4 +42,49 @@ test.describe("Stanbic Banking Portal — dashboard", () => {
       "Buy Airtime request queued — you will receive an SMS confirmation.",
     );
   });
+
+  test.describe("send money (local)", () => {
+    test("debits the balance including the flat fee and confirms with a reference", async () => {
+      await portal.sendMoney("Grace Njeri", "0712345678", 10_000);
+
+      await expect(portal.sendMoneyStatus).toContainText("KES 10,000.00 sent to Grace Njeri");
+      await expect(portal.sendMoneyStatus).toContainText("STB-SM-");
+      // 1,250,000 - 10,000 - 50 fee
+      await expect(portal.currentAccountCard).toContainText("KES 1,239,950.00");
+    });
+
+    test("blocks a send exceeding the available balance", async () => {
+      await portal.sendMoney("Grace Njeri", "0712345678", 2_000_000);
+
+      await expect(portal.sendMoneyError).toBeVisible();
+      await expect(portal.sendMoneyError).toContainText("Insufficient funds");
+      await expect(portal.currentAccountCard).toContainText("KES 1,250,000.00");
+    });
+
+    test("rejects an invalid mobile number", async () => {
+      await portal.sendMoney("Grace Njeri", "12345", 1_000);
+
+      await expect(portal.page.getByTestId("stb-sendmoney-mobile-error")).toContainText(
+        "valid Kenyan mobile number",
+      );
+      await expect(portal.currentAccountCard).toContainText("KES 1,250,000.00");
+    });
+  });
+
+  test.describe("deposit", () => {
+    test("credits the balance and confirms with a reference", async () => {
+      await portal.deposit(50_000, "M-PESA");
+
+      await expect(portal.depositStatus).toContainText("M-PESA deposit of KES 50,000.00 received");
+      await expect(portal.depositStatus).toContainText("STB-DEP-");
+      await expect(portal.currentAccountCard).toContainText("KES 1,300,000.00");
+    });
+
+    test("rejects a deposit below the KES 100 minimum", async () => {
+      await portal.deposit(50, "Cash");
+
+      await expect(portal.depositError).toContainText("at least KES 100");
+      await expect(portal.currentAccountCard).toContainText("KES 1,250,000.00");
+    });
+  });
 });

@@ -1,15 +1,13 @@
+import { useCallback, useState } from "react";
 import { AccountsOverview, type AccountSummary } from "./components/AccountsOverview";
+import { DepositPanel } from "./components/DepositPanel";
 import { QuickActions } from "./components/QuickActions";
+import { SendMoneyPanel } from "./components/SendMoneyPanel";
 import { TransferWidget } from "./components/TransferWidget";
 import { RecentTransactions, type Transaction } from "./components/RecentTransactions";
 
 const LIVE_RATES = { USD: 0.00775, GBP: 0.00612, EUR: 0.00718 } as const;
-
-const ACCOUNTS: readonly AccountSummary[] = [
-  { id: "current", label: "Current Account", balance: "KES 1,250,000.00", maskedNumber: "•••• 4521" },
-  { id: "savings", label: "Savings Account", balance: "KES 3,480,200.55", maskedNumber: "•••• 7810" },
-  { id: "usd", label: "USD Account", balance: "USD 12,940.10", maskedNumber: "•••• 2093" },
-];
+const OPENING_BALANCE_KES = 1_250_000;
 
 const RECENT_TRANSACTIONS: readonly Transaction[] = [
   { date: "05 Sep 2026", description: "Salary — Acme Industries Ltd", reference: "SAL-082026", amountKes: 320_000 },
@@ -18,7 +16,29 @@ const RECENT_TRANSACTIONS: readonly Transaction[] = [
   { date: "29 Aug 2026", description: "Naivas Supermarket", reference: "POS-77120", amountKes: -12_845.5 },
 ];
 
+function formatKes(amount: number): string {
+  return `KES ${amount.toLocaleString("en-KE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
 export function App() {
+  const [balanceKes, setBalanceKes] = useState<number>(OPENING_BALANCE_KES);
+
+  const debit = useCallback((amountKes: number) => {
+    setBalanceKes((current) => current - amountKes);
+  }, []);
+  const credit = useCallback((amountKes: number) => {
+    setBalanceKes((current) => current + amountKes);
+  }, []);
+
+  const accounts: readonly AccountSummary[] = [
+    { id: "current", label: "Current Account", balance: formatKes(balanceKes), maskedNumber: "•••• 4521" },
+    { id: "savings", label: "Savings Account", balance: "KES 3,480,200.55", maskedNumber: "•••• 7810" },
+    { id: "usd", label: "USD Account", balance: "USD 12,940.10", maskedNumber: "•••• 2093" },
+  ];
+
   return (
     <div className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-8">
       <header className="flex items-center justify-between text-white">
@@ -40,9 +60,13 @@ export function App() {
       </header>
 
       <main className="flex flex-col gap-6">
-        <AccountsOverview accounts={ACCOUNTS} />
+        <AccountsOverview accounts={accounts} />
         <QuickActions />
-        <TransferWidget initialBalanceKes={1_250_000} rates={LIVE_RATES} />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <SendMoneyPanel balanceKes={balanceKes} onSend={debit} />
+          <DepositPanel onDeposit={credit} />
+        </div>
+        <TransferWidget balanceKes={balanceKes} rates={LIVE_RATES} onDebit={debit} />
         <RecentTransactions transactions={RECENT_TRANSACTIONS} />
       </main>
 
