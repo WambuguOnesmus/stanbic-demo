@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { AccountsOverview, type AccountSummary } from "./components/AccountsOverview";
-import { DepositPanel } from "./components/DepositPanel";
+import { DepositModal, type DepositResult } from "./components/DepositModal";
 import { QuickActions } from "./components/QuickActions";
 import { SendMoneyPanel } from "./components/SendMoneyPanel";
 import { TransferWidget } from "./components/TransferWidget";
@@ -9,7 +9,7 @@ import { RecentTransactions, type Transaction } from "./components/RecentTransac
 const LIVE_RATES = { USD: 0.00775, GBP: 0.00612, EUR: 0.00718 } as const;
 const OPENING_BALANCE_KES = 1_250_000;
 
-const RECENT_TRANSACTIONS: readonly Transaction[] = [
+const SEEDED_TRANSACTIONS: readonly Transaction[] = [
   { date: "05 Sep 2026", description: "Salary — Acme Industries Ltd", reference: "SAL-082026", amountKes: 320_000 },
   { date: "03 Sep 2026", description: "KPLC Electricity", reference: "UTIL-99213", amountKes: -8_420 },
   { date: "01 Sep 2026", description: "Transfer to Savings ••7810", reference: "TRF-INT-5540", amountKes: -150_000 },
@@ -23,14 +23,30 @@ function formatKes(amount: number): string {
   })}`;
 }
 
+function todayLabel(): string {
+  return new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
 export function App() {
   const [balanceKes, setBalanceKes] = useState<number>(OPENING_BALANCE_KES);
+  const [transactions, setTransactions] = useState<readonly Transaction[]>(SEEDED_TRANSACTIONS);
+  const [depositOpen, setDepositOpen] = useState(false);
 
   const debit = useCallback((amountKes: number) => {
     setBalanceKes((current) => current - amountKes);
   }, []);
-  const credit = useCallback((amountKes: number) => {
-    setBalanceKes((current) => current + amountKes);
+
+  const handleDepositComplete = useCallback((result: DepositResult) => {
+    setBalanceKes((current) => current + result.amountKes);
+    setTransactions((current) => [
+      {
+        date: todayLabel(),
+        description: `${result.source} Deposit`,
+        reference: result.reference,
+        amountKes: result.amountKes,
+      },
+      ...current,
+    ]);
   }, []);
 
   const accounts: readonly AccountSummary[] = [
@@ -61,14 +77,17 @@ export function App() {
 
       <main className="flex flex-col gap-6">
         <AccountsOverview accounts={accounts} />
-        <QuickActions />
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <SendMoneyPanel balanceKes={balanceKes} onSend={debit} />
-          <DepositPanel onDeposit={credit} />
-        </div>
+        <QuickActions onDeposit={() => setDepositOpen(true)} />
+        <SendMoneyPanel balanceKes={balanceKes} onSend={debit} />
         <TransferWidget balanceKes={balanceKes} rates={LIVE_RATES} onDebit={debit} />
-        <RecentTransactions transactions={RECENT_TRANSACTIONS} />
+        <RecentTransactions transactions={transactions} />
       </main>
+
+      <DepositModal
+        open={depositOpen}
+        onClose={() => setDepositOpen(false)}
+        onComplete={handleDepositComplete}
+      />
 
       <footer className="text-center text-xs text-white/60">
         Stanbic Bank Kenya — Banking Portal. Rates are indicative and for demonstration only.

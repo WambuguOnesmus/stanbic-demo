@@ -71,20 +71,69 @@ test.describe("Stanbic Banking Portal — dashboard", () => {
     });
   });
 
-  test.describe("deposit", () => {
-    test("credits the balance and confirms with a reference", async () => {
-      await portal.deposit(50_000, "M-PESA");
+  test.describe("deposit (multi-step modal)", () => {
+    test("opens from the Deposit quick action with the details step active", async () => {
+      await portal.openDepositModal();
 
-      await expect(portal.depositStatus).toContainText("M-PESA deposit of KES 50,000.00 received");
-      await expect(portal.depositStatus).toContainText("STB-DEP-");
-      await expect(portal.currentAccountCard).toContainText("KES 1,300,000.00");
+      await expect(portal.depositModal).toBeVisible();
+      await expect(portal.page.getByTestId("stb-deposit-step-details")).toHaveAttribute(
+        "aria-current",
+        "step",
+      );
+      await expect(portal.depositAmount).toBeFocused();
     });
 
-    test("rejects a deposit below the KES 100 minimum", async () => {
-      await portal.deposit(50, "Cash");
+    test("validates the minimum amount on the details step", async () => {
+      await portal.openDepositModal();
+      await portal.depositAmount.fill("50");
+      await portal.depositNext.click();
 
       await expect(portal.depositError).toContainText("at least KES 100");
+      await expect(portal.depositConfirm).not.toBeVisible();
+    });
+
+    test("review step shows the summary and Back returns with values preserved", async () => {
+      await portal.openDepositModal();
+      await portal.depositAmount.fill("25000");
+      await portal.depositSource.selectOption("Cheque");
+      await portal.depositNext.click();
+
+      await expect(portal.depositReviewAmount).toContainText("KES 25,000.00");
+      await expect(portal.depositReviewSource).toContainText("Cheque");
+
+      await portal.depositBack.click();
+      await expect(portal.depositAmount).toHaveValue("25000");
+      await expect(portal.depositSource).toHaveValue("Cheque");
+    });
+
+    test("confirming credits the balance, records the transaction, and issues a reference", async () => {
+      await portal.deposit(50_000, "M-PESA");
+
+      await expect(portal.depositSuccess).toBeVisible();
+      await expect(portal.depositReference).toContainText(/^STB-DEP-/);
+      await expect(portal.currentAccountCard).toContainText("KES 1,300,000.00");
+
+      await portal.depositDone.click();
+      await expect(portal.depositModal).not.toBeVisible();
+
+      // Transaction recorded at the top of Recent Transactions.
+      await expect(portal.transactionRows).toHaveCount(5);
+      await expect(portal.transactionRows.first()).toContainText("M-PESA Deposit");
+      await expect(portal.transactionRows.first()).toContainText("+50,000.00");
+      await expect(portal.transactionRows.first()).toContainText("STB-DEP-");
+    });
+
+    test("closes via the close button and Escape without touching the balance", async () => {
+      await portal.openDepositModal();
+      await portal.depositClose.click();
+      await expect(portal.depositModal).not.toBeVisible();
+
+      await portal.openDepositModal();
+      await portal.page.keyboard.press("Escape");
+      await expect(portal.depositModal).not.toBeVisible();
+
       await expect(portal.currentAccountCard).toContainText("KES 1,250,000.00");
+      await expect(portal.transactionRows).toHaveCount(4);
     });
   });
 });

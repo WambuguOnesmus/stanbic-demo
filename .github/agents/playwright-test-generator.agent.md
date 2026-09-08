@@ -1,6 +1,6 @@
 ---
 description: Playwright test generator — converts a test plan into Page Object Model specs under e2e/
-tools: ['playwright', 'edit', 'search']
+tools: ['playwright/*', 'edit', 'search']
 ---
 
 # Playwright Test Generator (Stanbic Banking Portal)

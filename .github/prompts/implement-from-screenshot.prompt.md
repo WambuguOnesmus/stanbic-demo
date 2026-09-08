@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: "Implement a portal feature from a GitHub Issue (issue number = Item ID) and its prototype screenshot"
 ---
 

@@ -19,12 +19,19 @@ export class PortalPage {
   readonly sendMoneySubmit: Locator;
   readonly sendMoneyError: Locator;
   readonly sendMoneyStatus: Locator;
-  readonly depositPanel: Locator;
+  readonly depositModal: Locator;
   readonly depositAmount: Locator;
   readonly depositSource: Locator;
-  readonly depositSubmit: Locator;
   readonly depositError: Locator;
-  readonly depositStatus: Locator;
+  readonly depositNext: Locator;
+  readonly depositBack: Locator;
+  readonly depositConfirm: Locator;
+  readonly depositReviewAmount: Locator;
+  readonly depositReviewSource: Locator;
+  readonly depositSuccess: Locator;
+  readonly depositReference: Locator;
+  readonly depositDone: Locator;
+  readonly depositClose: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -43,12 +50,23 @@ export class PortalPage {
     this.sendMoneySubmit = page.getByTestId("stb-sendmoney-submit");
     this.sendMoneyError = page.getByTestId("stb-sendmoney-error");
     this.sendMoneyStatus = page.getByTestId("stb-sendmoney-status");
-    this.depositPanel = page.getByTestId("stb-deposit-panel");
+    this.depositModal = page.getByTestId("stb-deposit-modal");
     this.depositAmount = page.getByTestId("stb-deposit-amount");
     this.depositSource = page.getByTestId("stb-deposit-source");
-    this.depositSubmit = page.getByTestId("stb-deposit-submit");
     this.depositError = page.getByTestId("stb-deposit-error");
-    this.depositStatus = page.getByTestId("stb-deposit-status");
+    this.depositNext = page.getByTestId("stb-deposit-next");
+    this.depositBack = page.getByTestId("stb-deposit-back");
+    this.depositConfirm = page.getByTestId("stb-deposit-confirm");
+    this.depositReviewAmount = page.getByTestId("stb-deposit-review-amount");
+    this.depositReviewSource = page.getByTestId("stb-deposit-review-source");
+    this.depositSuccess = page.getByTestId("stb-deposit-success");
+    this.depositReference = page.getByTestId("stb-deposit-reference");
+    this.depositDone = page.getByTestId("stb-deposit-done");
+    this.depositClose = page.getByTestId("stb-deposit-close");
+  }
+
+  async openDepositModal(): Promise<void> {
+    await this.quickAction("deposit").click();
   }
 
   async sendMoney(recipient: string, mobile: string, amountKes: number): Promise<void> {
@@ -58,10 +76,13 @@ export class PortalPage {
     await this.sendMoneySubmit.click();
   }
 
+  /** Walks the full wizard: details -> review -> confirm (leaves the success step open). */
   async deposit(amountKes: number, source: string): Promise<void> {
+    await this.openDepositModal();
     await this.depositAmount.fill(String(amountKes));
     await this.depositSource.selectOption(source);
-    await this.depositSubmit.click();
+    await this.depositNext.click();
+    await this.depositConfirm.click();
   }
 
   quickAction(id: string): Locator {
