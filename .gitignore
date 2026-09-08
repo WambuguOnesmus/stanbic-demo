@@ -6,3 +6,6 @@ test-results/
 .env.*
 *.pem
 *.key
+
+.playwright-mcp/
+e2e/plans/
