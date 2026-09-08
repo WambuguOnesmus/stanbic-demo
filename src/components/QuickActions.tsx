@@ -9,8 +9,6 @@ export interface QuickAction {
 
 export interface QuickActionsProps {
   actions?: readonly QuickAction[];
-  /** Opens the multi-step deposit modal; other actions fall back to the queued status. */
-  onDeposit?: () => void;
 }
 
 const DEFAULT_ACTIONS: readonly QuickAction[] = [
@@ -20,16 +18,8 @@ const DEFAULT_ACTIONS: readonly QuickAction[] = [
   { id: "deposit", label: "Deposit", icon: "🏦" },
 ];
 
-export function QuickActions({ actions = DEFAULT_ACTIONS, onDeposit }: QuickActionsProps) {
+export function QuickActions({ actions = DEFAULT_ACTIONS }: QuickActionsProps) {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
-
-  const handleClick = (action: QuickAction) => {
-    if (action.id === "deposit" && onDeposit !== undefined) {
-      onDeposit();
-      return;
-    }
-    setStatusMessage(`${action.label} request queued — you will receive an SMS confirmation.`);
-  };
 
   return (
     <section
@@ -49,7 +39,7 @@ export function QuickActions({ actions = DEFAULT_ACTIONS, onDeposit }: QuickActi
             key={action.id}
             type="button"
             data-testid={`stb-action-${action.id}`}
-            onClick={() => handleClick(action)}
+            onClick={() => setStatusMessage(`${action.label} request queued — you will receive an SMS confirmation.`)}
             className="flex flex-col items-center gap-2 rounded-xl border-2 border-stanbic-royal/15 bg-stanbic-royal/5 px-4 py-4 text-sm font-bold text-stanbic-royal transition hover:border-stanbic-royal hover:bg-stanbic-royal hover:text-white focus-visible:ring-2 focus-visible:ring-stanbic-accent"
           >
             <span aria-hidden="true" className="text-2xl">

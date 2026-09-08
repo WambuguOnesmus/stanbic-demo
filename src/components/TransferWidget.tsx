@@ -11,16 +11,14 @@ export interface RateTable {
 }
 
 export interface TransferWidgetProps {
-  /** Current available balance in KES (major units), owned by the parent. */
-  balanceKes: number;
+  /** Opening available balance in KES (major units, display only). */
+  initialBalanceKes: number;
   /** Live exchange rates, KES -> destination currency. */
   rates: RateTable;
   /** Ad valorem transfer fee, e.g. 0.0125 for 1.25%. */
   feePct?: number;
   /** Flat SWIFT / correspondent charge in KES. */
   swiftChargeKes?: number;
-  /** Invoked with the total debit after a validated, successful submission. */
-  onDebit?: (amountKes: number) => void;
   /** Invoked after a validated, successful submission. */
   onSubmitted?: (receipt: TransferReceipt) => void;
 }
@@ -79,13 +77,13 @@ function formatCurrency(amount: number, currency: Currency): string {
 }
 
 export function TransferWidget({
-  balanceKes,
+  initialBalanceKes,
   rates,
   feePct = 0.0125,
   swiftChargeKes = 1500,
-  onDebit,
   onSubmitted,
 }: TransferWidgetProps) {
+  const [balanceKes, setBalanceKes] = useState<number>(initialBalanceKes);
   const [fields, setFields] = useState<FormFields>({
     amount: "",
     currency: "USD",
@@ -157,11 +155,11 @@ export function TransferWidget({
         currency: fields.currency,
         newBalanceKes: newBalance,
       };
-      onDebit?.(quote.totalDebit);
+      setBalanceKes(newBalance);
       setState({ status: "success", receipt });
       onSubmitted?.(receipt);
     },
-    [validate, balanceKes, quote, fields.beneficiaryName, fields.currency, onDebit, onSubmitted],
+    [validate, balanceKes, quote, fields.beneficiaryName, fields.currency, onSubmitted],
   );
 
   const resetForm = useCallback(() => {

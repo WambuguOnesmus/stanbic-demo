@@ -1,60 +1,24 @@
-import { useCallback, useState } from "react";
 import { AccountsOverview, type AccountSummary } from "./components/AccountsOverview";
-import { DepositModal, type DepositResult } from "./components/DepositModal";
 import { QuickActions } from "./components/QuickActions";
-import { SendMoneyPanel } from "./components/SendMoneyPanel";
 import { TransferWidget } from "./components/TransferWidget";
 import { RecentTransactions, type Transaction } from "./components/RecentTransactions";
 
 const LIVE_RATES = { USD: 0.00775, GBP: 0.00612, EUR: 0.00718 } as const;
-const OPENING_BALANCE_KES = 1_250_000;
 
-const SEEDED_TRANSACTIONS: readonly Transaction[] = [
+const ACCOUNTS: readonly AccountSummary[] = [
+  { id: "current", label: "Current Account", balance: "KES 1,250,000.00", maskedNumber: "•••• 4521" },
+  { id: "savings", label: "Savings Account", balance: "KES 3,480,200.55", maskedNumber: "•••• 7810" },
+  { id: "usd", label: "USD Account", balance: "USD 12,940.10", maskedNumber: "•••• 2093" },
+];
+
+const RECENT_TRANSACTIONS: readonly Transaction[] = [
   { date: "05 Sep 2026", description: "Salary — Acme Industries Ltd", reference: "SAL-082026", amountKes: 320_000 },
   { date: "03 Sep 2026", description: "KPLC Electricity", reference: "UTIL-99213", amountKes: -8_420 },
   { date: "01 Sep 2026", description: "Transfer to Savings ••7810", reference: "TRF-INT-5540", amountKes: -150_000 },
   { date: "29 Aug 2026", description: "Naivas Supermarket", reference: "POS-77120", amountKes: -12_845.5 },
 ];
 
-function formatKes(amount: number): string {
-  return `KES ${amount.toLocaleString("en-KE", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
-function todayLabel(): string {
-  return new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
-}
-
 export function App() {
-  const [balanceKes, setBalanceKes] = useState<number>(OPENING_BALANCE_KES);
-  const [transactions, setTransactions] = useState<readonly Transaction[]>(SEEDED_TRANSACTIONS);
-  const [depositOpen, setDepositOpen] = useState(false);
-
-  const debit = useCallback((amountKes: number) => {
-    setBalanceKes((current) => current - amountKes);
-  }, []);
-
-  const handleDepositComplete = useCallback((result: DepositResult) => {
-    setBalanceKes((current) => current + result.amountKes);
-    setTransactions((current) => [
-      {
-        date: todayLabel(),
-        description: `${result.source} Deposit`,
-        reference: result.reference,
-        amountKes: result.amountKes,
-      },
-      ...current,
-    ]);
-  }, []);
-
-  const accounts: readonly AccountSummary[] = [
-    { id: "current", label: "Current Account", balance: formatKes(balanceKes), maskedNumber: "•••• 4521" },
-    { id: "savings", label: "Savings Account", balance: "KES 3,480,200.55", maskedNumber: "•••• 7810" },
-    { id: "usd", label: "USD Account", balance: "USD 12,940.10", maskedNumber: "•••• 2093" },
-  ];
-
   return (
     <div className="mx-auto flex min-h-screen max-w-4xl flex-col gap-6 px-4 py-8">
       <header className="flex items-center justify-between text-white">
@@ -76,18 +40,11 @@ export function App() {
       </header>
 
       <main className="flex flex-col gap-6">
-        <AccountsOverview accounts={accounts} />
-        <QuickActions onDeposit={() => setDepositOpen(true)} />
-        <SendMoneyPanel balanceKes={balanceKes} onSend={debit} />
-        <TransferWidget balanceKes={balanceKes} rates={LIVE_RATES} onDebit={debit} />
-        <RecentTransactions transactions={transactions} />
+        <AccountsOverview accounts={ACCOUNTS} />
+        <QuickActions />
+        <TransferWidget initialBalanceKes={1_250_000} rates={LIVE_RATES} />
+        <RecentTransactions transactions={RECENT_TRANSACTIONS} />
       </main>
-
-      <DepositModal
-        open={depositOpen}
-        onClose={() => setDepositOpen(false)}
-        onComplete={handleDepositComplete}
-      />
 
       <footer className="text-center text-xs text-white/60">
         Stanbic Bank Kenya — Banking Portal. Rates are indicative and for demonstration only.
