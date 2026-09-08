@@ -67,8 +67,11 @@ export class StatementModal {
   readonly modal: Locator;
   readonly closeButton: Locator;
   readonly accountSelect: Locator;
+  readonly accountOptions: Locator;
   readonly periodSelect: Locator;
+  readonly periodOptions: Locator;
   readonly formatSelect: Locator;
+  readonly formatOptions: Locator;
   readonly nextButton: Locator;
   readonly backButton: Locator;
   readonly confirmButton: Locator;
@@ -84,8 +87,11 @@ export class StatementModal {
     this.modal = page.getByTestId("stb-statement-modal");
     this.closeButton = page.getByTestId("stb-statement-close");
     this.accountSelect = page.getByTestId("stb-statement-account");
+    this.accountOptions = this.accountSelect.locator("option");
     this.periodSelect = page.getByTestId("stb-statement-period");
+    this.periodOptions = this.periodSelect.locator("option");
     this.formatSelect = page.getByTestId("stb-statement-format");
+    this.formatOptions = this.formatSelect.locator("option");
     this.nextButton = page.getByTestId("stb-statement-next");
     this.backButton = page.getByTestId("stb-statement-back");
     this.confirmButton = page.getByTestId("stb-statement-confirm");
