@@ -113,3 +113,50 @@ export class StatementModal {
     await this.formatSelect.selectOption(format);
   }
 }
+
+/** Page Object Model for the Deposit multi-step modal (#11). */
+export class DepositModal {
+  readonly page: Page;
+
+  readonly modal: Locator;
+  readonly closeButton: Locator;
+  readonly amountInput: Locator;
+  readonly amountError: Locator;
+  readonly sourceSelect: Locator;
+  readonly sourceOptions: Locator;
+  readonly nextButton: Locator;
+  readonly backButton: Locator;
+  readonly confirmButton: Locator;
+  readonly reviewAmount: Locator;
+  readonly reviewSource: Locator;
+  readonly successPanel: Locator;
+  readonly reference: Locator;
+  readonly doneButton: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.modal = page.getByTestId("stb-deposit-modal");
+    this.closeButton = page.getByTestId("stb-deposit-close");
+    this.amountInput = page.getByTestId("stb-deposit-amount");
+    this.amountError = page.getByTestId("stb-deposit-error");
+    this.sourceSelect = page.getByTestId("stb-deposit-source");
+    this.sourceOptions = this.sourceSelect.locator("option");
+    this.nextButton = page.getByTestId("stb-deposit-next");
+    this.backButton = page.getByTestId("stb-deposit-back");
+    this.confirmButton = page.getByTestId("stb-deposit-confirm");
+    this.reviewAmount = page.getByTestId("stb-deposit-review-amount");
+    this.reviewSource = page.getByTestId("stb-deposit-review-source");
+    this.successPanel = page.getByTestId("stb-deposit-success");
+    this.reference = page.getByTestId("stb-deposit-reference");
+    this.doneButton = page.getByTestId("stb-deposit-done");
+  }
+
+  stepPill(step: "details" | "review" | "success"): Locator {
+    return this.page.getByTestId(`stb-deposit-step-${step}`);
+  }
+
+  async fillDetails(amount: string, source: string): Promise<void> {
+    await this.amountInput.fill(amount);
+    await this.sourceSelect.selectOption(source);
+  }
+}
