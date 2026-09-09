@@ -59,3 +59,57 @@ export class PortalPage {
     await this.page.goto("/");
   }
 }
+
+/** Page Object Model for the Account Statement multi-step modal (#15). */
+export class StatementModal {
+  readonly page: Page;
+
+  readonly modal: Locator;
+  readonly closeButton: Locator;
+  readonly accountSelect: Locator;
+  readonly accountOptions: Locator;
+  readonly periodSelect: Locator;
+  readonly periodOptions: Locator;
+  readonly formatSelect: Locator;
+  readonly formatOptions: Locator;
+  readonly nextButton: Locator;
+  readonly backButton: Locator;
+  readonly confirmButton: Locator;
+  readonly reviewAccount: Locator;
+  readonly reviewPeriod: Locator;
+  readonly reviewFormat: Locator;
+  readonly successPanel: Locator;
+  readonly reference: Locator;
+  readonly doneButton: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.modal = page.getByTestId("stb-statement-modal");
+    this.closeButton = page.getByTestId("stb-statement-close");
+    this.accountSelect = page.getByTestId("stb-statement-account");
+    this.accountOptions = this.accountSelect.locator("option");
+    this.periodSelect = page.getByTestId("stb-statement-period");
+    this.periodOptions = this.periodSelect.locator("option");
+    this.formatSelect = page.getByTestId("stb-statement-format");
+    this.formatOptions = this.formatSelect.locator("option");
+    this.nextButton = page.getByTestId("stb-statement-next");
+    this.backButton = page.getByTestId("stb-statement-back");
+    this.confirmButton = page.getByTestId("stb-statement-confirm");
+    this.reviewAccount = page.getByTestId("stb-statement-review-account");
+    this.reviewPeriod = page.getByTestId("stb-statement-review-period");
+    this.reviewFormat = page.getByTestId("stb-statement-review-format");
+    this.successPanel = page.getByTestId("stb-statement-success");
+    this.reference = page.getByTestId("stb-statement-reference");
+    this.doneButton = page.getByTestId("stb-statement-done");
+  }
+
+  stepPill(step: "details" | "review" | "success"): Locator {
+    return this.page.getByTestId(`stb-statement-step-${step}`);
+  }
+
+  async fillDetails(account: string, period: string, format: string): Promise<void> {
+    await this.accountSelect.selectOption(account);
+    await this.periodSelect.selectOption(period);
+    await this.formatSelect.selectOption(format);
+  }
+}

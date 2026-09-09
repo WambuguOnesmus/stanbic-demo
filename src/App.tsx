@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { AccountsOverview, type AccountSummary } from "./components/AccountsOverview";
 import { QuickActions } from "./components/QuickActions";
 import { RecentTransactions, type Transaction } from "./components/RecentTransactions";
+import { StatementModal } from "./components/StatementModal";
 
 const OPENING_BALANCE_KES = 1_250_000;
 
@@ -28,6 +29,13 @@ export function App() {
   const recordTransaction = useCallback((transaction: Transaction) => {
     setBalanceKes((current) => current + transaction.amountKes);
     setTransactions((current) => [transaction, ...current]);
+  }, []);
+
+  const [statementOpen, setStatementOpen] = useState(false);
+
+  const handleQuickAction = useCallback((id: string) => {
+    if (id === "download-statement") setStatementOpen(true);
+    // Remaining journeys (#11–#13) wire in via their own issues.
   }, []);
 
   const accounts: readonly AccountSummary[] = [
@@ -58,9 +66,11 @@ export function App() {
 
       <main className="flex flex-col gap-6">
         <AccountsOverview accounts={accounts} />
-        <QuickActions />
+        <QuickActions onAction={handleQuickAction} />
         <RecentTransactions transactions={transactions} />
       </main>
+
+      <StatementModal open={statementOpen} onClose={() => setStatementOpen(false)} />
 
       <footer className="text-center text-xs text-white/60">
         Stanbic Bank Kenya — Banking Portal. Rates are indicative and for demonstration only.

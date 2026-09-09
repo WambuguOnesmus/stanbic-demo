@@ -114,6 +114,10 @@ test.describe("Dashboard - accounts overview, quick actions and recent transacti
       await button.click();
       await expect(page).toHaveURL("/");
 
+      // A launcher may open its journey dialog (e.g. Statement, #15) — dismiss it
+      // so the next launcher is clickable again.
+      await page.keyboard.press("Escape");
+
       // Keyboard accessibility: each launcher is focusable.
       await button.focus();
       await expect(button).toBeFocused();
