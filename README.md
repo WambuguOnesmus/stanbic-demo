@@ -27,11 +27,11 @@ npm run test:e2e   # Playwright E2E suite
 | E2E suite (POM, `data-testid` only) + config | `e2e/` |
 | CI: E2E, CodeQL, Dependency Review, SBOM + attestations | `.github/workflows/` |
 | GHAS demo assets (deliberate vulns, custom secret patterns) | `src/utils/auditLogger.ts`, `src/config/stanbic-custom-patterns.json` |
-| Wiki source (Developer Guide, Demo Talk Track) | `wiki/` |
+| Wiki (setup, branching, demo talk track) | [GitHub wiki](https://github.com/WambuguOnesmus/stanbic-demo/wiki) |
 
 ## Delivery conventions
 
-- Branch: `feature/STB-<id>-<kebab-slug>` · Commit: `feat(portal): #<id> <description>`
+- Branch: `feature/<id>-<description>` (id = issue number) · Commit: `feat(portal): #<id> <description>`
 - Merges to `main` require a PR, CODEOWNERS approval, and green
   **Playwright E2E**, **CodeQL**, and **Dependency Review** checks.
 - Every interactive element carries a kebab-case `data-testid="stb-*"` selector.

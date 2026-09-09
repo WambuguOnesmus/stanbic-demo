@@ -558,6 +558,151 @@
             font-weight: 600;
             color: var(--success);
         }
+
+        /* ---- Send money ---- */
+        .sendmoney-card {
+            grid-column: 1 / -1;
+        }
+
+        .sendmoney-card h2 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+        }
+
+        .status-line {
+            grid-column: 1 / -1;
+            min-height: 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* ---- Deposit modal ---- */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(10, 34, 64, 0.7);
+            place-items: center;
+            padding: 1rem;
+        }
+
+        .modal-backdrop.visible {
+            display: grid;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 430px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: 0 16px 48px rgba(10, 34, 64, 0.35);
+            padding: 1.5rem;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .modal-head h2 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--stanbic-royal);
+        }
+
+        .modal-close {
+            border: none;
+            background: none;
+            font-size: 1.4rem;
+            line-height: 1;
+            color: var(--gray-600);
+            cursor: pointer;
+        }
+
+        .steps {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+            margin-bottom: 1.25rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .steps li {
+            flex: 1;
+            text-align: center;
+            padding: 0.3rem 0.5rem;
+            border-radius: 999px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            text-transform: capitalize;
+        }
+
+        .steps li[aria-current="step"] {
+            background: var(--stanbic-royal);
+            color: var(--white);
+        }
+
+        .modal-step {
+            display: none;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .modal-step.active {
+            display: flex;
+        }
+
+        .review-box {
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+        }
+
+        .review-box .quote-line strong {
+            color: var(--stanbic-navy);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .modal-actions .btn-primary,
+        .modal-actions .btn-secondary {
+            flex: 1;
+            margin-top: 0;
+        }
+
+        .success-mini {
+            text-align: center;
+        }
+
+        .success-mini .success-icon {
+            width: 56px;
+            height: 56px;
+            font-size: 1.6rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .success-mini p {
+            margin-bottom: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .success-mini .ref {
+            color: var(--stanbic-navy);
+            font-weight: 800;
+        }
     </style>
 </head>
 
@@ -599,8 +744,7 @@
             <button type="button" class="quick-btn" data-testid="stb-action-buy-airtime" data-action="Buy Airtime">
                 <span class="icon" aria-hidden="true">&#128241;</span> Buy Airtime
             </button>
-            <button type="button" class="quick-btn" data-testid="stb-action-download-statement"
-                data-action="Statement">
+            <button type="button" class="quick-btn" data-testid="stb-action-download-statement" data-action="Statement">
                 <span class="icon" aria-hidden="true">&#128196;</span> Statement
             </button>
             <button type="button" class="quick-btn" data-testid="stb-action-deposit" data-action="Deposit">
@@ -738,6 +882,44 @@
             </button>
         </section>
 
+        <!-- Send Money (Local) -->
+        <section class="card sendmoney-card" aria-labelledby="sendmoney-heading" data-testid="stb-sendmoney-panel">
+            <h2 id="sendmoney-heading">Send Money &mdash; Local (flat fee KES 50.00)</h2>
+            <form id="sm-form" class="form-grid" novalidate>
+                <div class="form-error-banner" id="sm-error" role="alert" data-testid="stb-sendmoney-error"></div>
+
+                <div class="field">
+                    <label for="sm-recipient">Recipient Name</label>
+                    <input type="text" id="sm-recipient" maxlength="70" placeholder="Full name"
+                        data-testid="stb-sendmoney-recipient" required />
+                    <span class="field-error" id="sm-recipient-error"
+                        data-testid="stb-sendmoney-recipient-error"></span>
+                </div>
+
+                <div class="field">
+                    <label for="sm-mobile">Mobile Number</label>
+                    <input type="tel" id="sm-mobile" maxlength="13" placeholder="07XX XXX XXX"
+                        data-testid="stb-sendmoney-mobile" required />
+                    <span class="field-error" id="sm-mobile-error" data-testid="stb-sendmoney-mobile-error"></span>
+                </div>
+
+                <div class="field">
+                    <label for="sm-amount">Amount (KES)</label>
+                    <input type="number" id="sm-amount" min="10" step="0.01" placeholder="e.g. 5,000"
+                        inputmode="decimal" data-testid="stb-sendmoney-amount" required />
+                    <span class="field-error" id="sm-amount-error" data-testid="stb-sendmoney-amount-error"></span>
+                </div>
+
+                <div class="field" style="justify-content:flex-end">
+                    <button type="submit" class="btn-primary" data-testid="stb-sendmoney-submit">
+                        Send Money
+                    </button>
+                </div>
+
+                <p class="status-line" aria-live="polite" id="sm-status" data-testid="stb-sendmoney-status"></p>
+            </form>
+        </section>
+
         <!-- Recent Transactions -->
         <section class="card transactions-card" aria-labelledby="transactions-heading"
             data-testid="stb-transactions-panel">
@@ -784,6 +966,288 @@
     <footer>
         Stanbic Bank Kenya &mdash; Banking Portal Prototype. Rates are indicative and for demonstration only.
     </footer>
+
+    <!-- Deposit Modal (multi-step) -->
+    <div class="modal-backdrop" id="dep-backdrop" data-testid="stb-deposit-backdrop">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dep-heading"
+            data-testid="stb-deposit-modal">
+            <div class="modal-head">
+                <h2 id="dep-heading">Deposit &mdash; Current Account</h2>
+                <button type="button" class="modal-close" aria-label="Close deposit dialog" id="dep-close"
+                    data-testid="stb-deposit-close">&times;</button>
+            </div>
+
+            <ol class="steps" aria-label="Deposit progress">
+                <li id="dep-step-pill-details" data-testid="stb-deposit-step-details" aria-current="step">1. Details
+                </li>
+                <li id="dep-step-pill-review" data-testid="stb-deposit-step-review">2. Review</li>
+                <li id="dep-step-pill-success" data-testid="stb-deposit-step-success">3. Success</li>
+            </ol>
+
+            <!-- Step 1: details -->
+            <div class="modal-step active" id="dep-step-details">
+                <div class="field">
+                    <label for="dep-amount">Amount (KES)</label>
+                    <input type="number" id="dep-amount" min="100" step="0.01" inputmode="decimal"
+                        placeholder="e.g. 50,000" data-testid="stb-deposit-amount" required />
+                    <span class="field-error" id="dep-error" role="alert" data-testid="stb-deposit-error"></span>
+                </div>
+                <div class="field">
+                    <label for="dep-source">Source</label>
+                    <select id="dep-source" data-testid="stb-deposit-source">
+                        <option value="Cash" selected>Cash</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="M-PESA">M-PESA</option>
+                    </select>
+                </div>
+                <button type="button" class="btn-primary" id="dep-next" data-testid="stb-deposit-next">
+                    Continue to Review
+                </button>
+            </div>
+
+            <!-- Step 2: review -->
+            <div class="modal-step" id="dep-step-review">
+                <div class="review-box">
+                    <div class="quote-line"><span>Amount</span><strong id="dep-review-amount"
+                            data-testid="stb-deposit-review-amount">&mdash;</strong></div>
+                    <div class="quote-line"><span>Source</span><strong id="dep-review-source"
+                            data-testid="stb-deposit-review-source">&mdash;</strong></div>
+                    <div class="quote-line"><span>Credited to</span><strong>Current Account &bull;&bull;&bull;&bull;
+                            4521</strong></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="dep-back"
+                        data-testid="stb-deposit-back">Back</button>
+                    <button type="button" class="btn-primary" id="dep-confirm" data-testid="stb-deposit-confirm">
+                        Confirm Deposit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: success -->
+            <div class="modal-step success-mini" id="dep-step-success" aria-live="polite"
+                data-testid="stb-deposit-success">
+                <div class="success-icon" aria-hidden="true">&#10003;</div>
+                <p><strong style="color:var(--success)">Deposit Recorded</strong></p>
+                <p id="dep-success-summary">&mdash;</p>
+                <p>Reference <span class="ref" id="dep-reference" data-testid="stb-deposit-reference">&mdash;</span>
+                </p>
+                <button type="button" class="btn-primary" id="dep-done" data-testid="stb-deposit-done">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pay Bills Modal (multi-step) -->
+    <div class="modal-backdrop" id="bill-backdrop" data-testid="stb-paybills-backdrop">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bill-heading"
+            data-testid="stb-paybills-modal">
+            <div class="modal-head">
+                <h2 id="bill-heading">Pay Bills</h2>
+                <button type="button" class="modal-close" aria-label="Close pay bills dialog" id="bill-close"
+                    data-testid="stb-paybills-close">&times;</button>
+            </div>
+            <ol class="steps" aria-label="Pay bills progress">
+                <li id="bill-step-pill-details" data-testid="stb-paybills-step-details" aria-current="step">1. Details
+                </li>
+                <li id="bill-step-pill-review" data-testid="stb-paybills-step-review">2. Review</li>
+                <li id="bill-step-pill-success" data-testid="stb-paybills-step-success">3. Success</li>
+            </ol>
+            <div class="modal-step active" id="bill-step-details">
+                <div class="field">
+                    <label for="bill-biller">Biller</label>
+                    <select id="bill-biller" data-testid="stb-paybills-biller">
+                        <option value="KPLC Electricity" selected>KPLC Electricity</option>
+                        <option value="Nairobi Water">Nairobi Water</option>
+                        <option value="DSTV">DSTV</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="bill-account">Account / Meter Number</label>
+                    <input type="text" id="bill-account" maxlength="20" placeholder="e.g. 54401123"
+                        data-testid="stb-paybills-account" required />
+                </div>
+                <div class="field">
+                    <label for="bill-amount">Amount (KES)</label>
+                    <input type="number" id="bill-amount" min="50" step="0.01" inputmode="decimal"
+                        placeholder="e.g. 4,500" data-testid="stb-paybills-amount" required />
+                    <span class="field-error" id="bill-error" role="alert" data-testid="stb-paybills-error"></span>
+                </div>
+                <button type="button" class="btn-primary" id="bill-next" data-testid="stb-paybills-next">
+                    Continue to Review
+                </button>
+            </div>
+            <div class="modal-step" id="bill-step-review">
+                <div class="review-box">
+                    <div class="quote-line"><span>Biller</span><strong id="bill-review-biller"
+                            data-testid="stb-paybills-review-biller">&mdash;</strong></div>
+                    <div class="quote-line"><span>Account / Meter</span><strong id="bill-review-account"
+                            data-testid="stb-paybills-review-account">&mdash;</strong></div>
+                    <div class="quote-line"><span>Amount</span><strong id="bill-review-amount"
+                            data-testid="stb-paybills-review-amount">&mdash;</strong></div>
+                    <div class="quote-line"><span>Debited from</span><strong>Current Account &bull;&bull;&bull;&bull;
+                            4521</strong></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="bill-back"
+                        data-testid="stb-paybills-back">Back</button>
+                    <button type="button" class="btn-primary" id="bill-confirm" data-testid="stb-paybills-confirm">
+                        Confirm Payment
+                    </button>
+                </div>
+            </div>
+            <div class="modal-step success-mini" id="bill-step-success" aria-live="polite"
+                data-testid="stb-paybills-success">
+                <div class="success-icon" aria-hidden="true">&#10003;</div>
+                <p><strong style="color:var(--success)">Bill Payment Submitted</strong></p>
+                <p id="bill-success-summary">&mdash;</p>
+                <p>Reference <span class="ref" id="bill-reference" data-testid="stb-paybills-reference">&mdash;</span>
+                </p>
+                <button type="button" class="btn-primary" id="bill-done" data-testid="stb-paybills-done">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buy Airtime Modal (multi-step) -->
+    <div class="modal-backdrop" id="air-backdrop" data-testid="stb-airtime-backdrop">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="air-heading"
+            data-testid="stb-airtime-modal">
+            <div class="modal-head">
+                <h2 id="air-heading">Buy Airtime</h2>
+                <button type="button" class="modal-close" aria-label="Close airtime dialog" id="air-close"
+                    data-testid="stb-airtime-close">&times;</button>
+            </div>
+            <ol class="steps" aria-label="Airtime progress">
+                <li id="air-step-pill-details" data-testid="stb-airtime-step-details" aria-current="step">1. Details
+                </li>
+                <li id="air-step-pill-review" data-testid="stb-airtime-step-review">2. Review</li>
+                <li id="air-step-pill-success" data-testid="stb-airtime-step-success">3. Success</li>
+            </ol>
+            <div class="modal-step active" id="air-step-details">
+                <div class="field">
+                    <label for="air-mobile">Mobile Number</label>
+                    <input type="tel" id="air-mobile" maxlength="13" placeholder="07XX XXX XXX"
+                        data-testid="stb-airtime-mobile" required />
+                </div>
+                <div class="field">
+                    <label for="air-network">Network</label>
+                    <select id="air-network" data-testid="stb-airtime-network">
+                        <option value="Safaricom" selected>Safaricom</option>
+                        <option value="Airtel">Airtel</option>
+                        <option value="Telkom">Telkom</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="air-amount">Amount (KES 10 &ndash; 10,000)</label>
+                    <input type="number" id="air-amount" min="10" max="10000" step="1" inputmode="numeric"
+                        placeholder="e.g. 500" data-testid="stb-airtime-amount" required />
+                    <span class="field-error" id="air-error" role="alert" data-testid="stb-airtime-error"></span>
+                </div>
+                <button type="button" class="btn-primary" id="air-next" data-testid="stb-airtime-next">
+                    Continue to Review
+                </button>
+            </div>
+            <div class="modal-step" id="air-step-review">
+                <div class="review-box">
+                    <div class="quote-line"><span>Mobile</span><strong id="air-review-mobile"
+                            data-testid="stb-airtime-review-mobile">&mdash;</strong></div>
+                    <div class="quote-line"><span>Network</span><strong id="air-review-network"
+                            data-testid="stb-airtime-review-network">&mdash;</strong></div>
+                    <div class="quote-line"><span>Amount</span><strong id="air-review-amount"
+                            data-testid="stb-airtime-review-amount">&mdash;</strong></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="air-back"
+                        data-testid="stb-airtime-back">Back</button>
+                    <button type="button" class="btn-primary" id="air-confirm" data-testid="stb-airtime-confirm">
+                        Confirm Top-Up
+                    </button>
+                </div>
+            </div>
+            <div class="modal-step success-mini" id="air-step-success" aria-live="polite"
+                data-testid="stb-airtime-success">
+                <div class="success-icon" aria-hidden="true">&#10003;</div>
+                <p><strong style="color:var(--success)">Airtime Purchased</strong></p>
+                <p id="air-success-summary">&mdash;</p>
+                <p>Reference <span class="ref" id="air-reference" data-testid="stb-airtime-reference">&mdash;</span>
+                </p>
+                <button type="button" class="btn-primary" id="air-done" data-testid="stb-airtime-done">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statement Modal (multi-step) -->
+    <div class="modal-backdrop" id="stm-backdrop" data-testid="stb-statement-backdrop">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="stm-heading"
+            data-testid="stb-statement-modal">
+            <div class="modal-head">
+                <h2 id="stm-heading">Account Statement</h2>
+                <button type="button" class="modal-close" aria-label="Close statement dialog" id="stm-close"
+                    data-testid="stb-statement-close">&times;</button>
+            </div>
+            <ol class="steps" aria-label="Statement progress">
+                <li id="stm-step-pill-details" data-testid="stb-statement-step-details" aria-current="step">1. Details
+                </li>
+                <li id="stm-step-pill-review" data-testid="stb-statement-step-review">2. Review</li>
+                <li id="stm-step-pill-success" data-testid="stb-statement-step-success">3. Success</li>
+            </ol>
+            <div class="modal-step active" id="stm-step-details">
+                <div class="field">
+                    <label for="stm-account">Account</label>
+                    <select id="stm-account" data-testid="stb-statement-account">
+                        <option value="Current Account •••• 4521" selected>Current Account &bull;&bull;&bull;&bull;
+                            4521</option>
+                        <option value="Savings Account •••• 7810">Savings Account &bull;&bull;&bull;&bull; 7810
+                        </option>
+                        <option value="USD Account •••• 2093">USD Account &bull;&bull;&bull;&bull; 2093</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="stm-period">Period</label>
+                    <select id="stm-period" data-testid="stb-statement-period">
+                        <option value="Last 30 days" selected>Last 30 days</option>
+                        <option value="Last 90 days">Last 90 days</option>
+                        <option value="Year to date">Year to date</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="stm-format">Format</label>
+                    <select id="stm-format" data-testid="stb-statement-format">
+                        <option value="PDF" selected>PDF</option>
+                        <option value="CSV">CSV</option>
+                    </select>
+                </div>
+                <button type="button" class="btn-primary" id="stm-next" data-testid="stb-statement-next">
+                    Continue to Review
+                </button>
+            </div>
+            <div class="modal-step" id="stm-step-review">
+                <div class="review-box">
+                    <div class="quote-line"><span>Account</span><strong id="stm-review-account"
+                            data-testid="stb-statement-review-account">&mdash;</strong></div>
+                    <div class="quote-line"><span>Period</span><strong id="stm-review-period"
+                            data-testid="stb-statement-review-period">&mdash;</strong></div>
+                    <div class="quote-line"><span>Format</span><strong id="stm-review-format"
+                            data-testid="stb-statement-review-format">&mdash;</strong></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="stm-back"
+                        data-testid="stb-statement-back">Back</button>
+                    <button type="button" class="btn-primary" id="stm-confirm" data-testid="stb-statement-confirm">
+                        Generate Statement
+                    </button>
+                </div>
+            </div>
+            <div class="modal-step success-mini" id="stm-step-success" aria-live="polite"
+                data-testid="stb-statement-success">
+                <div class="success-icon" aria-hidden="true">&#10003;</div>
+                <p><strong style="color:var(--success)">Statement Ready</strong></p>
+                <p id="stm-success-summary">&mdash;</p>
+                <p>Reference <span class="ref" id="stm-reference" data-testid="stb-statement-reference">&mdash;</span>
+                </p>
+                <button type="button" class="btn-primary" id="stm-done" data-testid="stb-statement-done">Done</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         "use strict";
@@ -904,14 +1368,282 @@
             document.getElementById("transfer-section").style.display = "";
         });
 
-        // --- Quick actions ---
-        const quickStatus = document.getElementById("quick-status");
+        // --- Quick actions: every action launches a multi-step modal ---
+        const QUICK_ACTION_MODALS = {
+            "Pay Bills": () => openWizard("bill", () => document.getElementById("bill-account").focus()),
+            "Buy Airtime": () => openWizard("air", () => document.getElementById("air-mobile").focus()),
+            "Statement": () => openWizard("stm", () => document.getElementById("stm-account").focus()),
+            "Deposit": () => openDepositModal(),
+        };
         for (const btn of document.querySelectorAll(".quick-btn")) {
-            btn.addEventListener("click", () => {
-                quickStatus.textContent =
-                    btn.dataset.action + " request queued — you will receive an SMS confirmation.";
-            });
+            btn.addEventListener("click", () => QUICK_ACTION_MODALS[btn.dataset.action]());
         }
+
+        // --- Transaction recording ---
+        const txBody = document.querySelector(".tx-table tbody");
+        function todayLabel() {
+            return new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+        }
+        function addTransaction(description, reference, amount) {
+            const row = document.createElement("tr");
+            row.setAttribute("data-testid", "stb-transaction-row");
+            const cls = amount < 0 ? "tx-amount-debit" : "tx-amount-credit";
+            const sign = amount < 0 ? "-" : "+";
+            const cells = [todayLabel(), description, reference];
+            for (const text of cells) {
+                const td = document.createElement("td");
+                td.textContent = text;
+                row.appendChild(td);
+            }
+            const amountTd = document.createElement("td");
+            amountTd.className = cls;
+            amountTd.textContent = sign + Math.abs(amount).toLocaleString("en-KE",
+                { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            row.appendChild(amountTd);
+            txBody.prepend(row);
+        }
+
+        // --- Send money (local) ---
+        const SEND_FEE_KES = 50;
+        const smForm = document.getElementById("sm-form");
+        const smRecipient = document.getElementById("sm-recipient");
+        const smMobile = document.getElementById("sm-mobile");
+        const smAmount = document.getElementById("sm-amount");
+        const smError = document.getElementById("sm-error");
+        const smStatus = document.getElementById("sm-status");
+
+        smForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            smStatus.textContent = "";
+            smError.classList.remove("visible");
+            smError.textContent = "";
+
+            let valid = true;
+            valid &= setFieldError(smRecipient, document.getElementById("sm-recipient-error"),
+                !/^[A-Za-z][A-Za-z .'-]{2,69}$/.test(smRecipient.value.trim())
+                    ? "Enter the recipient's full name." : "");
+            valid &= setFieldError(smMobile, document.getElementById("sm-mobile-error"),
+                !/^(?:\+?254|0)7\d{8}$/.test(smMobile.value.replace(/\s+/g, ""))
+                    ? "Enter a valid Kenyan mobile number (07XX XXX XXX)." : "");
+            const amount = Number.parseFloat(smAmount.value) || 0;
+            valid &= setFieldError(smAmount, document.getElementById("sm-amount-error"),
+                amount < 10 ? "Enter an amount of at least KES 10." : "");
+            if (!valid) return;
+
+            const totalDebit = amount + SEND_FEE_KES;
+            if (totalDebit > balanceKes) {
+                smError.textContent = "Insufficient funds: total debit " + fmtKes(totalDebit) +
+                    " (incl. " + fmtKes(SEND_FEE_KES) + " fee) exceeds your available balance of " +
+                    fmtKes(balanceKes) + ".";
+                smError.classList.add("visible");
+                return;
+            }
+
+            balanceKes -= totalDebit;
+            renderBalance();
+            const ref = "STB-SM-" + Date.now().toString(36).toUpperCase();
+            addTransaction("Send Money — " + smRecipient.value.trim(), ref, -totalDebit);
+            smStatus.textContent = fmtKes(amount) + " sent to " + smRecipient.value.trim() +
+                " (" + smMobile.value.trim() + ") — reference " + ref + ".";
+            smForm.reset();
+        });
+
+        // --- Deposit modal (multi-step) ---
+        const depBackdrop = document.getElementById("dep-backdrop");
+        const depAmount = document.getElementById("dep-amount");
+        const depSource = document.getElementById("dep-source");
+        const depError = document.getElementById("dep-error");
+        const depReference = document.getElementById("dep-reference");
+        const DEP_STEPS = ["details", "review", "success"];
+
+        function showDepositStep(step) {
+            for (const s of DEP_STEPS) {
+                document.getElementById("dep-step-" + s).classList.toggle("active", s === step);
+                const pill = document.getElementById("dep-step-pill-" + s);
+                if (s === step) { pill.setAttribute("aria-current", "step"); }
+                else { pill.removeAttribute("aria-current"); }
+            }
+        }
+
+        function openDepositModal() {
+            depAmount.value = "";
+            depSource.value = "Cash";
+            depError.textContent = "";
+            showDepositStep("details");
+            depBackdrop.classList.add("visible");
+            depAmount.focus();
+        }
+
+        function closeDepositModal() {
+            depBackdrop.classList.remove("visible");
+        }
+
+        document.getElementById("dep-next").addEventListener("click", () => {
+            const amount = Number.parseFloat(depAmount.value) || 0;
+            if (amount < 100) {
+                depError.textContent = "Enter a deposit of at least KES 100.";
+                return;
+            }
+            depError.textContent = "";
+            document.getElementById("dep-review-amount").textContent = fmtKes(amount);
+            document.getElementById("dep-review-source").textContent = depSource.value;
+            showDepositStep("review");
+        });
+
+        document.getElementById("dep-back").addEventListener("click", () => showDepositStep("details"));
+
+        document.getElementById("dep-confirm").addEventListener("click", () => {
+            const amount = Number.parseFloat(depAmount.value) || 0;
+            const ref = "STB-DEP-" + Date.now().toString(36).toUpperCase();
+            balanceKes += amount;
+            renderBalance();
+            addTransaction(depSource.value + " Deposit", ref, amount);
+            depReference.textContent = ref;
+            document.getElementById("dep-success-summary").textContent =
+                depSource.value + " deposit of " + fmtKes(amount) + " has been credited.";
+            showDepositStep("success");
+        });
+
+        document.getElementById("dep-done").addEventListener("click", closeDepositModal);
+        document.getElementById("dep-close").addEventListener("click", closeDepositModal);
+
+        // --- Generic wizard helper for the pay-bills / airtime / statement modals ---
+        function showWizardStep(prefix, step) {
+            for (const s of ["details", "review", "success"]) {
+                document.getElementById(prefix + "-step-" + s).classList.toggle("active", s === step);
+                const pill = document.getElementById(prefix + "-step-pill-" + s);
+                if (s === step) { pill.setAttribute("aria-current", "step"); }
+                else { pill.removeAttribute("aria-current"); }
+            }
+        }
+
+        function openWizard(prefix, focus) {
+            showWizardStep(prefix, "details");
+            document.getElementById(prefix + "-backdrop").classList.add("visible");
+            if (focus) focus();
+        }
+
+        function closeWizard(prefix) {
+            document.getElementById(prefix + "-backdrop").classList.remove("visible");
+        }
+
+        function setupWizard(prefix, onNext, onConfirm) {
+            document.getElementById(prefix + "-next").addEventListener("click", () => {
+                if (onNext()) showWizardStep(prefix, "review");
+            });
+            document.getElementById(prefix + "-back").addEventListener("click", () => showWizardStep(prefix, "details"));
+            document.getElementById(prefix + "-confirm").addEventListener("click", () => {
+                onConfirm();
+                showWizardStep(prefix, "success");
+            });
+            document.getElementById(prefix + "-done").addEventListener("click", () => closeWizard(prefix));
+            document.getElementById(prefix + "-close").addEventListener("click", () => closeWizard(prefix));
+        }
+
+        // Pay Bills
+        setupWizard("bill",
+            () => {
+                const err = document.getElementById("bill-error");
+                const account = document.getElementById("bill-account").value.trim();
+                const amount = Number.parseFloat(document.getElementById("bill-amount").value) || 0;
+                if (!/^[A-Za-z0-9-]{4,20}$/.test(account)) {
+                    err.textContent = "Enter a valid account or meter number (4\u201320 characters).";
+                    return false;
+                }
+                if (amount < 50) {
+                    err.textContent = "Enter an amount of at least KES 50.";
+                    return false;
+                }
+                if (amount > balanceKes) {
+                    err.textContent = "Insufficient funds: " + fmtKes(amount) +
+                        " exceeds your available balance of " + fmtKes(balanceKes) + ".";
+                    return false;
+                }
+                err.textContent = "";
+                document.getElementById("bill-review-biller").textContent =
+                    document.getElementById("bill-biller").value;
+                document.getElementById("bill-review-account").textContent = account;
+                document.getElementById("bill-review-amount").textContent = fmtKes(amount);
+                return true;
+            },
+            () => {
+                const biller = document.getElementById("bill-biller").value;
+                const amount = Number.parseFloat(document.getElementById("bill-amount").value) || 0;
+                const ref = "STB-BILL-" + Date.now().toString(36).toUpperCase();
+                balanceKes -= amount;
+                renderBalance();
+                addTransaction(biller + " Bill", ref, -amount);
+                document.getElementById("bill-reference").textContent = ref;
+                document.getElementById("bill-success-summary").textContent =
+                    fmtKes(amount) + " paid to " + biller + ".";
+            });
+
+        // Buy Airtime
+        setupWizard("air",
+            () => {
+                const err = document.getElementById("air-error");
+                const mobile = document.getElementById("air-mobile").value.replace(/\s+/g, "");
+                const amount = Number.parseFloat(document.getElementById("air-amount").value) || 0;
+                if (!/^(?:\+?254|0)7\d{8}$/.test(mobile)) {
+                    err.textContent = "Enter a valid Kenyan mobile number (07XX XXX XXX).";
+                    return false;
+                }
+                if (amount < 10 || amount > 10000) {
+                    err.textContent = "Enter an amount between KES 10 and KES 10,000.";
+                    return false;
+                }
+                if (amount > balanceKes) {
+                    err.textContent = "Insufficient funds for this top-up.";
+                    return false;
+                }
+                err.textContent = "";
+                document.getElementById("air-review-mobile").textContent =
+                    document.getElementById("air-mobile").value.trim();
+                document.getElementById("air-review-network").textContent =
+                    document.getElementById("air-network").value;
+                document.getElementById("air-review-amount").textContent = fmtKes(amount);
+                return true;
+            },
+            () => {
+                const network = document.getElementById("air-network").value;
+                const mobile = document.getElementById("air-mobile").value.trim();
+                const amount = Number.parseFloat(document.getElementById("air-amount").value) || 0;
+                const ref = "STB-AIR-" + Date.now().toString(36).toUpperCase();
+                balanceKes -= amount;
+                renderBalance();
+                addTransaction(network + " Airtime — " + mobile, ref, -amount);
+                document.getElementById("air-reference").textContent = ref;
+                document.getElementById("air-success-summary").textContent =
+                    fmtKes(amount) + " " + network + " airtime sent to " + mobile + ".";
+            });
+
+        // Statement (no balance impact)
+        setupWizard("stm",
+            () => {
+                document.getElementById("stm-review-account").textContent =
+                    document.getElementById("stm-account").value;
+                document.getElementById("stm-review-period").textContent =
+                    document.getElementById("stm-period").value;
+                document.getElementById("stm-review-format").textContent =
+                    document.getElementById("stm-format").value;
+                return true;
+            },
+            () => {
+                const ref = "STB-STM-" + Date.now().toString(36).toUpperCase();
+                document.getElementById("stm-reference").textContent = ref;
+                document.getElementById("stm-success-summary").textContent =
+                    document.getElementById("stm-format").value + " statement for " +
+                    document.getElementById("stm-account").value + " (" +
+                    document.getElementById("stm-period").value + ") is ready for download.";
+            });
+
+        // Escape closes any open modal
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Escape") return;
+            for (const backdrop of document.querySelectorAll(".modal-backdrop.visible")) {
+                backdrop.classList.remove("visible");
+            }
+        });
 
         // --- Simulated live-rate drift for demo realism ---
         // Math.random is safe here: cosmetic demo drift only, never a security value.

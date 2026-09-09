@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export interface QuickAction {
   /** Stable id used in the data-testid suffix, e.g. "pay-bills" -> stb-action-pay-bills. */
   id: string;
@@ -9,6 +7,8 @@ export interface QuickAction {
 
 export interface QuickActionsProps {
   actions?: readonly QuickAction[];
+  /** Journey launcher per action id; journeys ship in their own issues. */
+  onAction?: (id: string) => void;
 }
 
 const DEFAULT_ACTIONS: readonly QuickAction[] = [
@@ -18,9 +18,7 @@ const DEFAULT_ACTIONS: readonly QuickAction[] = [
   { id: "deposit", label: "Deposit", icon: "🏦" },
 ];
 
-export function QuickActions({ actions = DEFAULT_ACTIONS }: QuickActionsProps) {
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
-
+export function QuickActions({ actions = DEFAULT_ACTIONS, onAction }: QuickActionsProps) {
   return (
     <section
       aria-labelledby="stb-quick-actions-heading"
@@ -39,7 +37,7 @@ export function QuickActions({ actions = DEFAULT_ACTIONS }: QuickActionsProps) {
             key={action.id}
             type="button"
             data-testid={`stb-action-${action.id}`}
-            onClick={() => setStatusMessage(`${action.label} request queued — you will receive an SMS confirmation.`)}
+            onClick={() => onAction?.(action.id)}
             className="flex flex-col items-center gap-2 rounded-xl border-2 border-stanbic-royal/15 bg-stanbic-royal/5 px-4 py-4 text-sm font-bold text-stanbic-royal transition hover:border-stanbic-royal hover:bg-stanbic-royal hover:text-white focus-visible:ring-2 focus-visible:ring-stanbic-accent"
           >
             <span aria-hidden="true" className="text-2xl">
@@ -49,13 +47,6 @@ export function QuickActions({ actions = DEFAULT_ACTIONS }: QuickActionsProps) {
           </button>
         ))}
       </div>
-      <p
-        aria-live="polite"
-        data-testid="stb-action-status"
-        className="mt-3 min-h-5 text-sm font-semibold text-green-700"
-      >
-        {statusMessage}
-      </p>
     </section>
   );
 }
