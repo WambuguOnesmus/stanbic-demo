@@ -15,11 +15,15 @@ type Step = "details" | "review" | "success";
 const STEPS: readonly Step[] = ["details", "review", "success"];
 const MIN_DEPOSIT_KES = 100;
 
-/** Parse the raw amount field into KES rounded to cents; NaN-safe. */
+/** Parse the raw amount field into a finite KES value; NaN-safe. */
 function parseAmountKes(raw: string): number {
   const parsed = Number.parseFloat(raw);
-  if (!Number.isFinite(parsed)) return 0;
-  return Math.round(parsed * 100) / 100;
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+/** Round a KES amount to cents for display and ledger recording. */
+function roundToCents(amount: number): number {
+  return Math.round(amount * 100) / 100;
 }
 
 function formatKes(amount: number): string {
@@ -64,10 +68,12 @@ export function DepositModal({ open, onClose, onDeposit }: DepositModalProps) {
 
   if (!open) return null;
 
-  const amountKes = parseAmountKes(amountRaw);
+  const parsedAmount = parseAmountKes(amountRaw);
+  const amountKes = roundToCents(parsedAmount);
 
   const next = () => {
-    if (amountKes < MIN_DEPOSIT_KES) {
+    // Validate the unrounded input so e.g. 99.999 cannot round up past the minimum.
+    if (parsedAmount < MIN_DEPOSIT_KES) {
       setError("Enter a deposit of at least KES 100.");
       return;
     }
@@ -153,13 +159,15 @@ export function DepositModal({ open, onClose, onDeposit }: DepositModalProps) {
                 onChange={(e) => setAmountRaw(e.target.value)}
                 className="rounded-lg border border-slate-300 px-3 py-2 focus-visible:border-stanbic-royal focus-visible:ring-2 focus-visible:ring-stanbic-accent"
               />
-              <span
-                role="alert"
-                data-testid="stb-deposit-error"
-                className="text-sm font-semibold text-red-700"
-              >
-                {error}
-              </span>
+              {error !== "" && (
+                <span
+                  role="alert"
+                  data-testid="stb-deposit-error"
+                  className="text-sm font-semibold text-red-700"
+                >
+                  {error}
+                </span>
+              )}
             </div>
             <div className="flex flex-col gap-1">
               <label htmlFor="stb-deposit-source" className="text-sm font-semibold text-stanbic-navy">
